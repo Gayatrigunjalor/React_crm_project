@@ -131,7 +131,7 @@ const CustomLeadStatusDropdown = () => {
           border-radius: 15px;
           font-size: 12px;
           font-weight: 500;
-          height: 36px;
+          height: 26px;
           padding: 0 16px;
           cursor: pointer;
           display: flex;

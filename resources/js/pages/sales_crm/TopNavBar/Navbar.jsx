@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Badges from "../../../assets/img/newIcons/Badges.svg";
 import Modal from 'react-bootstrap/Modal';
 import AddProductForm from '../inquiryRecived/AddproductForm';
+import  ChangeOwner from "../inquiryRecived/Changeowner";
 
 const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, query_product_name, sender_name, customer_id }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -142,6 +143,15 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
     setShowAddProductModal(false); // hide modal
   };
 
+   const [showChangeownerModal, setShowChangeownerModal] = useState(false);
+
+  const handleChangeowner = () => {
+   setShowChangeownerModal(true); // show modal
+  };
+
+  const handleCloseChangeownerModal = () => {
+    setShowChangeownerModal(false); // hide modal
+  };
   return (
     <>
       <div style={{
@@ -307,7 +317,7 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
               </button>
             </div>
             <div>
-              <button className="action-btn" >
+              <button className="action-btn"  onClick={ handleChangeowner}>
                 Change Owner
               </button>
             </div>
@@ -401,11 +411,26 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
           size="500px"
 
         >
-          <Modal.Header closeButton>
-            <Modal.Title>Add Product</Modal.Title>
+          <Modal.Header closeBu tton>
           </Modal.Header>
           <Modal.Body>
             <AddProductForm onClose={handleCloseAddProductModal} />
+          </Modal.Body>
+        </Modal>
+
+
+        <Modal
+          show={showChangeownerModal}
+          onHide={handleChangeowner}
+          centered
+          backdrop="static"
+          size="500px"
+
+        >
+          <Modal.Header closeButton>
+          </Modal.Header>
+          <Modal.Body>
+            <ChangeOwner onClose={handleCloseChangeownerModal} />
           </Modal.Body>
         </Modal>
 
