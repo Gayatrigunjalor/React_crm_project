@@ -3,10 +3,12 @@ import SectionMenu from "../SectionMenu/sectionMenu";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import Badges from "../../../assets/img/newIcons/Badges.svg";
-import Modal from 'react-bootstrap/Modal';
+// import Modal from 'react-bootstrap/Modal';
 import AddProductForm from '../inquiryRecived/AddproductForm';
-import  ChangeOwner from "../inquiryRecived/Changeowner";
-
+import ChangeOwner from "../inquiryRecived/Changeowner";
+import Productdirectory from "../inquiryRecived/Productdirectory";
+import { Modal } from "react-bootstrap"; // if using react-bootstrap
+import RemarkForm from "../inquiryRecived/Remark";
 const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, query_product_name, sender_name, customer_id }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   useEffect(() => {
@@ -20,15 +22,14 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
 
   const navigate = useNavigate();
   const handleStageSelect = (index) => {
-    navigate(`/stage/${customer_id}/${index}`); // Navigate to a new page dynamically
+    navigate(`/stage/${customer_id}/${index}`);
   };
 
-  // Badge Number Component
   const NumberBadge = ({ number }) => (
     <div style={{
       position: "absolute",
-      top: "-12px", // Position above the text
-      right: "-12px", // Increased gap from text end
+      top: "-12px",
+      right: "-12px",
       zIndex: 10
     }}>
       <img
@@ -134,24 +135,51 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
 
 `;
   const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [showChangeownerModal, setShowChangeownerModal] = useState(false);
+  const [showProductDirectoryModal, setShowProductDirectoryModal] = useState(false);
+  const [showRemarkModal, setShowRemarkModal] = useState(false);
 
   const handleAddProduct = () => {
-    setShowAddProductModal(true); // show modal
+    setShowAddProductModal(true); // show modal1
   };
 
   const handleCloseAddProductModal = () => {
-    setShowAddProductModal(false); // hide modal
+    setShowAddProductModal(false); // hide modal1
   };
 
-   const [showChangeownerModal, setShowChangeownerModal] = useState(false);
 
   const handleChangeowner = () => {
-   setShowChangeownerModal(true); // show modal
+    setShowChangeownerModal(true); // show modal2
   };
 
   const handleCloseChangeownerModal = () => {
-    setShowChangeownerModal(false); // hide modal
+    setShowChangeownerModal(false); // hide modal2
   };
+
+
+  const handleProductDirectoryModal = () => {
+    setShowProductDirectoryModal(true); // ✅ Correct: opens modal
+  };
+
+  const handleCloseProductDirectoryModal = () => {
+    setShowProductDirectoryModal(false); // ✅ Correct: closes modal
+  };
+
+
+
+  const handleRemarkModal = () => {
+    setShowRemarkModal(true); // ✅ Correct: opens modal
+  };
+
+  const handleCloseRemarkModal = () => {
+    setShowRemarkModal(false); // ✅ Correct: closes modal
+  };
+
+
+
+
+
+
   return (
     <>
       <div style={{
@@ -312,17 +340,18 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
               </button>
             </div>
             <div>
-              <button className="action-btn" >
+              <button className="action-btn" onClick={handleProductDirectoryModal} >
+
                 Product Directory
               </button>
             </div>
             <div>
-              <button className="action-btn"  onClick={ handleChangeowner}>
+              <button className="action-btn" onClick={handleChangeowner}>
                 Change Owner
               </button>
             </div>
             <div>
-              <button className="action-btn" >
+              <button className="action-btn" onClick={handleRemarkModal}>
                 Remark
               </button>
             </div>
@@ -399,6 +428,11 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
   color: #fff;
   border: none;
 }
+.custom-modal-width  {
+  max-width: 1300px; /* Adjust width as needed */
+  width: 1629px;
+  height: 88px; /* Adjust height as needed */
+}
 
               `}
           </style>
@@ -411,8 +445,7 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
           size="500px"
 
         >
-          <Modal.Header closeBu tton>
-          </Modal.Header>
+
           <Modal.Body>
             <AddProductForm onClose={handleCloseAddProductModal} />
           </Modal.Body>
@@ -427,10 +460,40 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
           size="500px"
 
         >
-          <Modal.Header closeButton>
-          </Modal.Header>
+
           <Modal.Body>
             <ChangeOwner onClose={handleCloseChangeownerModal} />
+          </Modal.Body>
+        </Modal>
+
+
+        <Modal
+          show={showProductDirectoryModal}
+          onHide={handleCloseProductDirectoryModal}
+          centered
+          backdrop="static"
+          dialogClassName="custom-modal-width"
+        >
+
+          <Modal.Header>
+            <button type="button" className="btn-close" onClick={handleCloseProductDirectoryModal} aria-label="Close"></button>
+          </Modal.Header>
+          <Modal.Body>
+            <Productdirectory onClose={handleCloseProductDirectoryModal} />
+          </Modal.Body>
+        </Modal>
+        <Modal
+          show={showRemarkModal}
+          onHide={handleCloseRemarkModal}
+          centered
+          backdrop="static"
+          size="500px"
+        >
+          <Modal.Header>
+            <button type="button" className="btn-close" onClick={handleCloseRemarkModal} aria-label="Close"></button>
+          </Modal.Header>
+          <Modal.Body>
+            <RemarkForm onClose={handleCloseRemarkModal} />
           </Modal.Body>
         </Modal>
 

@@ -21,6 +21,8 @@ import { MdDeleteForever } from "react-icons/md";
 import main from '../../../assets/img/icons/doc_download.svg';
 import { useAuth } from '../../../AuthContext';
 import Rightcard from "./rightcard";
+import { useNavigate } from 'react-router-dom';
+
 import {
     DropdownButton,
     Form,
@@ -45,7 +47,7 @@ const InquiredData = (props) => {
     const [productDirectory, setProductDirectory] = useState([]);
     const [formValues, setFormValues] = useState({});
     const [attachmentFields, setAttachmentFields] = useState([{ id: 1 }]);
-
+    const navigate = useNavigate();
     const [files, setFiles] = useState({});
     const [customerNeedRecord, setCustomerNeedRecord] = useState("");
     const [inorbvictCommitmentRecord, setInorbvictCommitmentRecord] =
@@ -64,6 +66,9 @@ const InquiredData = (props) => {
     const [productList, setProductList] = useState([]);
     const [currencyTableData, setCurrencyTableData] = useState([]);
     const [currencyOptions, setCurrencyOptions] = useState([]);
+    const handleClick = () => {
+        navigate('/SecondMain'); // Replace with your actual route
+    };
 
     const [opportunityDetails, setOpportunityDetails] = useState({
         id: null,
@@ -1011,7 +1016,7 @@ const InquiredData = (props) => {
                             gap: "10px",
                             marginTop: "auto",
                             paddingTop: "1rem"
-                        }}>
+                        }}> 
                             <button
                                 style={{
                                     backgroundColor: "#E5E7EB",
@@ -1041,6 +1046,7 @@ const InquiredData = (props) => {
                                     cursor: "pointer",
                                     transition: "background-color 0.2s"
                                 }}
+                                onClick={handleClick}
 
                                 onMouseOver={(e) => e.target.style.backgroundColor = "#1E3A8A"}
                                 onMouseOut={(e) => e.target.style.backgroundColor = "#2E467A"}

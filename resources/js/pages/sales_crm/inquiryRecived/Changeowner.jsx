@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Dropdown, Button } from "react-bootstrap";
 
-const ChangeOwner = () => {
-    const [selectedEmployee, setSelectedEmployee] = useState("");
+const ChangeOwner = ({ onClose }) => {
+  const [selectedEmployee, setSelectedEmployee] = useState("");
 
-    return (
-        <Container
-            className="shadow rounded bg-white py-4 px-5"
-            style={{ maxWidth: "700px" }}
-        >
-            <style>{` 
+  return (
+    <Container
+      className="shadow rounded bg-white py-4 px-5"
+      style={{ maxWidth: "700px" }}
+    >
+      <style>{` 
       .form-heading {
           text-align: center;
           font-size: 20px;
@@ -35,22 +35,22 @@ const ChangeOwner = () => {
         .form-heading::after {
           right: 0;
         }
-        .btn-gradient-red {
-          background: linear-gradient(to right, #480102, #AE0205);
-          color: #FFFFFF;
+        .btn-cancel {
+          background: linear-gradient(to right, #a30707, #720101);
+          color: #fff;
           border: none;
-          border-radius: 20px;
-          padding: 8px 30px;
-          font-weight: 500;
+          padding: 12px 34px;
+          border-radius: 15px;
         }
-        .btn-gradient-blue {
+
+        .btn-save {
           background: linear-gradient(to right, #111A2E, #375494);
-          color: #FFFFFF;
+          color: #fff;
           border: none;
-          border-radius: 20px;
-          padding: 8px 30px;
-          font-weight: 500;
+          padding: 12px 34px;
+          border-radius: 15px;
         }
+
         .section-title {
           text-align: center;
           font-weight: 600;
@@ -70,40 +70,40 @@ const ChangeOwner = () => {
         }
       `}</style>
 
-            {/* <div className="section-title">Change Owner</div> */}
-            <div className="form-heading">ChangeOwner</div>
+      {/* <div className="section-title">Change Owner</div> */}
+      <div className="form-heading">ChangeOwner</div>
 
 
-            <Row className="align-items-center mb-4">
-                <Col md={6} className="d-flex align-items-center mb-2 mb-md-0">
-                    <span className="label">Current Owner Name:</span>
-                    <span className="value">Dhanashree Chavan</span>
-                </Col>
-                <Col md={6} className="d-flex align-items-center">
-                    <span className="label">Change Owner:</span>
-                    <Dropdown onSelect={(e) => setSelectedEmployee(e)}>
-                        <Dropdown.Toggle
-                            variant="light"
-                            style={{ width: "100%", borderRadius: "20px", color: "#2E467A99" }}
-                            className=" border-0 fw-semibold"
-                        >
-                            {selectedEmployee || "Select Employee"}
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            <Dropdown.Item eventKey="Employee A">Employee A</Dropdown.Item>
-                            <Dropdown.Item eventKey="Employee B">Employee B</Dropdown.Item>
-                            <Dropdown.Item eventKey="Employee C">Employee C</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Col>
-            </Row>
+      <Row className="align-items-center mb-4">
+        <Col md={6} className="d-flex align-items-center mb-2 mb-md-0">
+          <span className="label">Current Owner Name:</span>
+          <span className="value">Dhanashree Chavan</span>
+        </Col>
+        <Col md={6} className="d-flex align-items-center">
+          <span className="label">Change Owner:</span>
+          <Dropdown onSelect={(e) => setSelectedEmployee(e)}>
+            <Dropdown.Toggle
+              variant="light"
+              style={{ width: "100%", borderRadius: "20px", color: "#2E467A99" }}
+              className=" border-0 fw-semibold"
+            >
+              {selectedEmployee || "Select Employee"}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="Employee A">Employee A</Dropdown.Item>
+              <Dropdown.Item eventKey="Employee B">Employee B</Dropdown.Item>
+              <Dropdown.Item eventKey="Employee C">Employee C</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+      </Row>
 
-            <div className="d-flex justify-content-center gap-3">
-                <Button className="btn-gradient-red">Cancel</Button>
-                <Button className="btn-gradient-blue">Save</Button>
-            </div>
-        </Container>
-    );
+      <div className="d-flex justify-content-center gap-3">
+        <Button className="btn-cancel" onClick={onClose}>Cancel</Button>
+        <Button className="btn-save">Save</Button>
+      </div>
+    </Container>
+  );
 };
 
 export default ChangeOwner;

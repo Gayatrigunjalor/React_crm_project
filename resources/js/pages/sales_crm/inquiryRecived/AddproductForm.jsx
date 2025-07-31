@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import EditIcon from "../../../assets/img/newIcons/edit.svg";
 
-const AddproductFrom = () => {
+const AddproductFrom = ({ onClose }) => {
   return (
     <>
       <style>{`
@@ -113,7 +113,7 @@ const AddproductFrom = () => {
           background: linear-gradient(to right, #111A2E, #375494);
           color: #fff;
           border: none;
-          padding: 6px 24px;
+          padding: 12px 34px;
           border-radius: 15px;
         }
 
@@ -194,7 +194,7 @@ const AddproductFrom = () => {
         </Row>
 
         <div className="action-buttons">
-          <Button className="btn-cancel">Cancel</Button>
+          <Button className="btn-cancel" onClick={onClose}>Cancel</Button>
           <Button className="btn-save">Save</Button>
         </div>
       </div>

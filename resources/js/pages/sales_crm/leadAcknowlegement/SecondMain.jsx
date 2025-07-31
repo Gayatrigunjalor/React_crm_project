@@ -122,6 +122,16 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
         setCheckedClarityPendingItems({});
     };
 
+const components = [
+    { id: 1, component: (props) => <InquiredData {...props} />, name: "Inquired Data" },
+    { id: 2, component: SecondMain, name: "Lead Acknowledgement" },
+    { id: 3, component: ProductSourcing, name: "Product Sourcing" },
+    { id: 4, component: PriceShared, name: "Price Shared" },
+    { id: 5, component: FifthMain, name: "Quotation Sent" },
+    { id: 6, component: DecisionAwaited, name: "Follow Up" },
+    { id: 7, component: VictoryStage, name: "Victory Stage" },
+];
+
     // Function to check if any checkboxes are selected
     const hasAnySelections = () => {
         return Object.keys(checkedQualifiedItems).length > 0 ||
