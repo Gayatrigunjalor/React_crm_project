@@ -133,6 +133,7 @@ const AddproductFrom = ({ onClose }) => {
 
       <div className="form-container">
         <div className="form-heading">Add Product</div>
+        
 
         <div className="checkbox-container">
           <Form.Check type="checkbox" />

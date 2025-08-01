@@ -7,6 +7,8 @@ import chanakya from "../../../assets/img/newIcons/chank.svg";
 import chat from "../../../assets/img/newIcons/chats.svg";
 import tabframe from "../../../assets/img/newIcons/tabframe.svg";
 import TaskManagerContent from "./Taskmanger";
+import  Chankya  from "./Chankya";
+import Chatbot from "./Chatbot";
 
 const Rightcard = () => {
   const [key, setKey] = useState("task");
@@ -59,8 +61,13 @@ const Rightcard = () => {
                     <TaskManagerContent />
 
                   </Tab.Pane>
-                  <Tab.Pane eventKey="chat">Chat View Content</Tab.Pane>
-                  <Tab.Pane eventKey="chanakya">Chanakya Content</Tab.Pane>
+                  <Tab.Pane eventKey="chat">
+                    <Chatbot />
+
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="chanakya">
+                    <Chankya />
+                  </Tab.Pane>
                   <Tab.Pane eventKey="sarthii">Sarthii Content</Tab.Pane>
                 </Tab.Content>
               </Col>

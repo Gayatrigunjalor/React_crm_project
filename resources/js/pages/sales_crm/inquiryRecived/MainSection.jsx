@@ -67,7 +67,7 @@ const InquiredData = (props) => {
     const [currencyTableData, setCurrencyTableData] = useState([]);
     const [currencyOptions, setCurrencyOptions] = useState([]);
     const handleClick = () => {
-        navigate('/SecondMain'); // Replace with your actual route
+        navigate('/sales_crm/inquiryRecived/SecondMain/4218/2695/109572404'); // Replace with your actual route
     };
 
     const [opportunityDetails, setOpportunityDetails] = useState({
