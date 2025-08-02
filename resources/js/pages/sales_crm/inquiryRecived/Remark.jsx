@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import edit from "../../../assets/img/newIcons/edit.svg";
 
-const RemarkForm = ({ onClose }) => {
+const Remark = ({ onClose }) => {
   const [remark, setRemark] = useState("");
 
   const handleSubmit = (e) => {
@@ -19,29 +19,50 @@ const RemarkForm = ({ onClose }) => {
         padding: "20px",
         fontFamily: "Nunito Sans, sans-serif",
         width: "100%",
-        maxWidth: "450px",
+        maxWidth: "550px", // make sure this exists
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        position: "relative"
       }}
     >
-      {/* Remark Label with Icon */}
+
+      {/* Header with title and close button */}
       <div
         style={{
           display: "flex",
           alignItems: "center",
-          marginBottom: "20px",
+          justifyContent: "space-between",
+          marginBottom: "20px"
         }}
       >
-        <span
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span
+            style={{
+              fontSize: "18px",
+              fontWeight: "600",
+              color: "#111A2E",
+              marginRight: "8px",
+            }}
+          >
+            Remark
+          </span>
+          <img src={edit} alt="edit" style={{ width: "16px", height: "16px" }} />
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
           style={{
-            fontSize: "16px",
-            fontWeight: "600",
-            color: "#111A2E",
-            marginRight: "8px",
+            background: "transparent",
+            border: "none",
+            fontSize: "20px",
+            fontWeight: "bold",
+            color: "#2E467A",
+            cursor: "pointer",
+            lineHeight: "1",
           }}
+          aria-label="Close"
         >
-          Remark
-        </span>
-        <img src={edit} alt="edit" style={{ width: "16px", height: "16px" }} />
+          &times;
+        </button>
       </div>
 
       {/* Custom multi-line underlines */}
@@ -61,11 +82,10 @@ const RemarkForm = ({ onClose }) => {
             fontFamily: "inherit",
             color: "#111A2E",
             backgroundColor: "transparent",
-            lineHeight: "32px", // spacing between lines
+            lineHeight: "32px",
             height: "128px",
           }}
         />
-        {/* Simulated underline lines */}
         {[...Array(4)].map((_, index) => (
           <div
             key={index}
@@ -103,4 +123,4 @@ const RemarkForm = ({ onClose }) => {
   );
 };
 
-export default RemarkForm;
+export default Remark;

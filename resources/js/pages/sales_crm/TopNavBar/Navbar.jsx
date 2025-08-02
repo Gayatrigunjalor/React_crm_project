@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import SectionMenu from "../SectionMenu/sectionMenu";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { useNavigate } from "react-router-dom";
 import Badges from "../../../assets/img/newIcons/Badges.svg";
-// import Modal from 'react-bootstrap/Modal';
-import AddProductForm from '../inquiryRecived/AddproductForm';
+import AddproductFrom from "../inquiryRecived/AddproductForm";
 import ChangeOwner from "../inquiryRecived/Changeowner";
+import Remark from "../inquiryRecived/Remark";
 import Productdirectory from "../inquiryRecived/Productdirectory";
-import { Modal } from "react-bootstrap"; // if using react-bootstrap
-import RemarkForm from "../inquiryRecived/Remark";
+
 const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, query_product_name, sender_name, customer_id }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   useEffect(() => {
@@ -56,6 +54,11 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
       </span>
     </div>
   );
+  const [showAddProductForm, setShowAddProductForm] = useState(false); // NEW STATE
+  const [showChangeOwnerForm, setShowChangeOwnerForm] = useState(false);
+  const [showRemarkForm, setShowRemarkForm] = useState(false);
+  const [showProductDirectory, setShowProductDirectory] = useState(false);
+
 
   const placeholderStyle = `
   ::placeholder {
@@ -134,49 +137,6 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
 }
 
 `;
-  const [showAddProductModal, setShowAddProductModal] = useState(false);
-  const [showChangeownerModal, setShowChangeownerModal] = useState(false);
-  const [showProductDirectoryModal, setShowProductDirectoryModal] = useState(false);
-  const [showRemarkModal, setShowRemarkModal] = useState(false);
-
-  const handleAddProduct = () => {
-    setShowAddProductModal(true); // show modal1
-  };
-
-  const handleCloseAddProductModal = () => {
-    setShowAddProductModal(false); // hide modal1
-  };
-
-
-  const handleChangeowner = () => {
-    setShowChangeownerModal(true); // show modal2
-  };
-
-  const handleCloseChangeownerModal = () => {
-    setShowChangeownerModal(false); // hide modal2
-  };
-
-
-  const handleProductDirectoryModal = () => {
-    setShowProductDirectoryModal(true); // ✅ Correct: opens modal
-  };
-
-  const handleCloseProductDirectoryModal = () => {
-    setShowProductDirectoryModal(false); // ✅ Correct: closes modal
-  };
-
-
-
-  const handleRemarkModal = () => {
-    setShowRemarkModal(true); // ✅ Correct: opens modal
-  };
-
-  const handleCloseRemarkModal = () => {
-    setShowRemarkModal(false); // ✅ Correct: closes modal
-  };
-
-
-
 
 
 
@@ -335,25 +295,28 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
             }}
           >
             <div>
-              <button className="action-btn" onClick={handleAddProduct}>
+              <button className="action-btn" onClick={() => setShowAddProductForm(true)}>
                 Add Product
               </button>
+
             </div>
             <div>
-              <button className="action-btn" onClick={handleProductDirectoryModal} >
-
+              <button className="action-btn" onClick={() => setShowProductDirectory(true)}>
                 Product Directory
               </button>
+
             </div>
             <div>
-              <button className="action-btn" onClick={handleChangeowner}>
+              <button className="action-btn" onClick={() => setShowChangeOwnerForm(true)}>
                 Change Owner
               </button>
+
             </div>
             <div>
-              <button className="action-btn" onClick={handleRemarkModal}>
+              <button className="action-btn" onClick={() => setShowRemarkForm(true)}>
                 Remark
               </button>
+
             </div>
             <div>
               <button className="action-btn" >
@@ -428,74 +391,134 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
   color: #fff;
   border: none;
 }
-.custom-modal-width  {
-  max-width: 1300px; /* Adjust width as needed */
-  width: 1629px;
-  height: 88px; /* Adjust height as needed */
-}
 
               `}
           </style>
         </nav>
-        <Modal
-          show={showAddProductModal}
-          onHide={handleCloseAddProductModal}
-          centered
-          backdrop="static"
-          size="500px"
 
-        >
-
-          <Modal.Body>
-            <AddProductForm onClose={handleCloseAddProductModal} />
-          </Modal.Body>
-        </Modal>
-
-
-        <Modal
-          show={showChangeownerModal}
-          onHide={handleChangeowner}
-          centered
-          backdrop="static"
-          size="500px"
-
-        >
-
-          <Modal.Body>
-            <ChangeOwner onClose={handleCloseChangeownerModal} />
-          </Modal.Body>
-        </Modal>
+        {showAddProductForm && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0, left: 0,
+              width: "100%", height: "100%",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1050 // keep above all other content
+            }}
+          >
+            <div style={{ background: "#fff", borderRadius: "20px", padding: "20px", position: "relative" }}>
+              <AddproductFrom onClose={() => setShowAddProductForm(false)} />
+            </div>
+          </div>
+        )}
 
 
-        <Modal
-          show={showProductDirectoryModal}
-          onHide={handleCloseProductDirectoryModal}
-          centered
-          backdrop="static"
-          dialogClassName="custom-modal-width"
-        >
+        {showChangeOwnerForm && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0, left: 0,
+              width: "100%", height: "100%",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1050
+            }}
+          >
+            <div style={{ background: "#fff", borderRadius: "20px", padding: "20px", position: "relative" }}>
+              <ChangeOwner onClose={() => setShowChangeOwnerForm(false)} />
+            </div>
+          </div>
+        )}
 
-          <Modal.Header>
-            <button type="button" className="btn-close" onClick={handleCloseProductDirectoryModal} aria-label="Close"></button>
-          </Modal.Header>
-          <Modal.Body>
-            <Productdirectory onClose={handleCloseProductDirectoryModal} />
-          </Modal.Body>
-        </Modal>
-        <Modal
-          show={showRemarkModal}
-          onHide={handleCloseRemarkModal}
-          centered
-          backdrop="static"
-          size="500px"
-        >
-          <Modal.Header>
-            <button type="button" className="btn-close" onClick={handleCloseRemarkModal} aria-label="Close"></button>
-          </Modal.Header>
-          <Modal.Body>
-            <RemarkForm onClose={handleCloseRemarkModal} />
-          </Modal.Body>
-        </Modal>
+        {showRemarkForm && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1050
+            }}
+          >
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: "20px",
+                padding: "0",
+                position: "relative",
+                width: "100%",
+                maxWidth: "550px", // Ensure the wrapper also matches form width
+                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              }}
+            >
+              <Remark onClose={() => setShowRemarkForm(false)} />
+            </div>
+
+          </div>
+        )}
+        {showProductDirectory && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1050
+            }}
+          >
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: "20px",
+                padding: "20px",
+                width: "100%",
+                maxWidth: "1150px", // ✅ adjust width for the big table
+                height: "auto", // auto height
+                boxSizing: "border-box",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                overflow: "auto",
+                position: "relative",
+              }}
+            >
+              {/* Optional: Add a close "×" button */}
+              {/* <button
+                onClick={() => setShowProductDirectory(false)}
+                style={{
+                  position: "absolute",
+                  top: "16px",
+                  right: "16px",
+                  background: "transparent",
+                  border: "none",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  color: "#888"
+                }}
+                aria-label="Close"
+              >
+                &times;
+              </button> */}
+
+              <Productdirectory onClose={() => setShowProductDirectory(false)} />
+            </div>
+          </div>
+        )}
+
 
       </div>
     </>

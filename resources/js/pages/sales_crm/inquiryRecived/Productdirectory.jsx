@@ -97,8 +97,23 @@ const Productdirectory = ({ onClose }) => {
           background: #fff;
           padding: 0;
           margin: 0;
-        }
-      `}</style>
+        } 
+          .close-btn {
+  background: none;
+  border: none;
+          color: #2E467A;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
+      `}</style> 
+    <div className="d-flex justify-content-between align-items-center  p-2"> 
+      <h5 className="mb-0" style={{color:"#2E467A"}}>Product Directory</h5>
+  <button className="close-btn" onClick={onClose}>&times;</button>
+</div>
+
       <div className="table-responsive">
         <table className="table table-hover mb-0">
           <thead className="gradient-header text-white">

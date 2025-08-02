@@ -39,7 +39,7 @@ const ChangeOwner = ({ onClose }) => {
           background: linear-gradient(to right, #a30707, #720101);
           color: #fff;
           border: none;
-          padding: 12px 34px;
+          padding: 12px 30px;
           border-radius: 15px;
         }
 
@@ -47,7 +47,7 @@ const ChangeOwner = ({ onClose }) => {
           background: linear-gradient(to right, #111A2E, #375494);
           color: #fff;
           border: none;
-          padding: 12px 34px;
+          padding: 12px 30px;
           border-radius: 15px;
         }
 
