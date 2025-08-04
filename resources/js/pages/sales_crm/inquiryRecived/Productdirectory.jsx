@@ -108,11 +108,11 @@ const Productdirectory = ({ onClose }) => {
   line-height: 1;
 }
 
-      `}</style> 
-    <div className="d-flex justify-content-between align-items-center  p-2"> 
-      <h5 className="mb-0" style={{color:"#2E467A"}}>Product Directory</h5>
-  <button className="close-btn" onClick={onClose}>&times;</button>
-</div>
+      `}</style>
+      <div className="d-flex justify-content-between align-items-center  p-2">
+        <h5 className="mb-0" style={{ color: "#2E467A" }}>Product Directory</h5>
+        <button className="close-btn" onClick={onClose}>&times;</button>
+      </div>
 
       <div className="table-responsive">
         <table className="table table-hover mb-0">
@@ -138,8 +138,8 @@ const Productdirectory = ({ onClose }) => {
                 <td className="fw-bold" style={{ textAlign: 'center' }}>{item.targetPrice}</td>
                 <td className="text-center">
                   <span className="action-btn-group">
-                      <img src={edit} alt="Edit" style={{ width: '16px', height: '16px' }} />
-                      <img src={deleteIcon} alt="Delete" style={{ width: '16px', height: '16px' }} />
+                    <img src={edit} alt="Edit" style={{ width: '16px', height: '16px' }} />
+                    <img src={deleteIcon} alt="Delete" style={{ width: '16px', height: '16px' }} />
                   </span>
                 </td>
               </tr>
@@ -151,4 +151,4 @@ const Productdirectory = ({ onClose }) => {
   );
 };
 
-  export default Productdirectory;
+export default Productdirectory;

@@ -201,9 +201,11 @@ width: 900px;
                 fontSize: '14px',
                 fontWeight: 700,
                 color: '#2E467A',
-                margin: '0 10px',
+                // margin: '0 10px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
+                marginLeft: '10px',
+
             }}>
 
                 {/* Each section below */}
@@ -296,7 +298,7 @@ width: 900px;
             {showFeedbackForm && (
                 <div className="modal-backdrop">
                     <div className="modal-content feedback-modal">
-                        
+
                         <FeedbackForm onClose={() => setShowFeedbackForm(false)} />
                     </div>
                 </div>

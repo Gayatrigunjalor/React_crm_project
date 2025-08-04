@@ -9,88 +9,89 @@ import PriceShared from "../PriceShared/PriceShared";
 import FifthMain from "../QuotationSend/QuotationSend";
 import DecisionAwaited from "../DecisionAwaited/DecisionAwaited";
 import VictoryStage from "../VictoryStage/VictoryStage";
-const Popup = ({ onSelectOption, onClose }) => {
-    return (
-        <div
-            style={{
-                position: "fixed",
-                top: "10%",
-                left: "50%",
-                transform: "translateX(-50%)",
-                backgroundColor: "#F0EBEBFF",
-                padding: "30px",
-                borderRadius: "8px",
-                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                zIndex: "1000",
-                transition: "filter 0.3s ease",
-            }}
-        >
-            <div>
-                <h5 className="mt-1 mb-3" style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', }}>Select an Option</h5>
-                <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => onSelectOption("qualified")}
-                    style={{
-                        padding: "10px",
-                        margin: "5px",
-                        width: "10rem",
-                        fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
-                    }}
-                >
-                    Qualified Opportunity
-                </button>
+import Rightcard from "../inquiryRecived/Rightcard";
+// const Popup = ({ onSelectOption, onClose }) => {
+//     return (
+//         <div
+//             style={{
+//                 position: "fixed",
+//                 top: "10%",
+//                 left: "50%",
+//                 transform: "translateX(-50%)",
+//                 backgroundColor: "#F0EBEBFF",
+//                 padding: "30px",
+//                 borderRadius: "8px",
+//                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+//                 zIndex: "1000",
+//                 transition: "filter 0.3s ease",
+//             }}
+//         >
+//             <div>
+//                 <h5 className="mt-1 mb-3" style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', }}>Select an Option</h5>
+//                 <button
+//                     type="button"
+//                     className="btn btn-primary"
+//                     onClick={() => onSelectOption("qualified")}
+//                     style={{
+//                         padding: "10px",
+//                         margin: "5px",
+//                         width: "10rem",
+//                         fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
+//                     }}
+//                 >
+//                     Qualified Opportunity
+//                 </button>
 
-                <button
-                    type="button"
-                    className="btn btn-warning"
-                    onClick={() => onSelectOption("clarityPending")}
-                    style={{
-                        padding: "10px",
-                        margin: "5px",
-                        width: "10rem",
-                        fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
-                    }}
-                >
-                    Clarity Pending
-                </button>
+//                 <button
+//                     type="button"
+//                     className="btn btn-warning"
+//                     onClick={() => onSelectOption("clarityPending")}
+//                     style={{
+//                         padding: "10px",
+//                         margin: "5px",
+//                         width: "10rem",
+//                         fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
+//                     }}
+//                 >
+//                     Clarity Pending
+//                 </button>
 
-                <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => onSelectOption("disqualified")}
-                    style={{
-                        padding: "10px",
-                        margin: "5px",
-                        color: "#fff",
-                        width: "10rem",
-                        fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
-                    }}
-                >
-                    Disqualified
-                </button>
-            </div>
-            {/* <button
-                type="button"
-                className="btn "
-                onClick={onClose}
-                style={{
-                    float: "right",
-                    width: "6rem",
-                    marginTop: "15px",
-                    padding: "7px 10px",
-                    borderRadius: "5px",
-                    backgroundColor: "#424240",
-                    color: "white",
-                    fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
-                }}
+//                 <button
+//                     type="button"
+//                     className="btn btn-danger"
+//                     onClick={() => onSelectOption("disqualified")}
+//                     style={{
+//                         padding: "10px",
+//                         margin: "5px",
+//                         color: "#fff",
+//                         width: "10rem",
+//                         fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
+//                     }}
+//                 >
+//                     Disqualified
+//                 </button>
+//             </div>
+//             {/* <button
+//                 type="button"
+//                 className="btn "
+//                 onClick={onClose}
+//                 style={{
+//                     float: "right",
+//                     width: "6rem",
+//                     marginTop: "15px",
+//                     padding: "7px 10px",
+//                     borderRadius: "5px",
+//                     backgroundColor: "#424240",
+//                     color: "white",
+//                     fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700',
+//                 }}
 
-            >
-                Close
-            </button> */}
-        </div>
-    );
-};
+//             >
+//                 Close
+//             </button> */}
+//         </div>
+//     );
+// };
 
 const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
     const [qualifiedData, setQualifiedData] = useState([]);
@@ -127,21 +128,21 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
         setCheckedClarityPendingItems({});
     };
 
-const components = [
-    { id: 1, component: (props) => <InquiredData {...props} />, name: "Inquired Data" },
-    { id: 2, component: SecondMain, name: "Lead Acknowledgement" },
-    { id: 3, component: ProductSourcing, name: "Product Sourcing" },
-    { id: 4, component: PriceShared, name: "Price Shared" },
-    { id: 5, component: FifthMain, name: "Quotation Sent" },
-    { id: 6, component: DecisionAwaited, name: "Follow Up" },
-    { id: 7, component: VictoryStage, name: "Victory Stage" },
-];
+    const components = [
+        { id: 1, component: (props) => <InquiredData {...props} />, name: "Inquired Data" },
+        { id: 2, component: SecondMain, name: "Lead Acknowledgement" },
+        { id: 3, component: ProductSourcing, name: "Product Sourcing" },
+        { id: 4, component: PriceShared, name: "Price Shared" },
+        { id: 5, component: FifthMain, name: "Quotation Sent" },
+        { id: 6, component: DecisionAwaited, name: "Follow Up" },
+        { id: 7, component: VictoryStage, name: "Victory Stage" },
+    ];
 
     // Function to check if any checkboxes are selected
     const hasAnySelections = () => {
         return Object.keys(checkedQualifiedItems).length > 0 ||
-               Object.keys(checkedDisqualifiedItems).length > 0 ||
-               Object.keys(checkedClarityPendingItems).length > 0;
+            Object.keys(checkedDisqualifiedItems).length > 0 ||
+            Object.keys(checkedClarityPendingItems).length > 0;
     };
 
     useEffect(() => {
@@ -372,7 +373,7 @@ const components = [
     const renderTable = () => {
         // Create a combined array of all entries with their dates and types
         const allEntries = [];
-        
+
         // Add qualified entries
         showLeadqualified?.forEach((item, index) => {
             if (item && item.length > 0) {
@@ -416,61 +417,333 @@ const components = [
         allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         return (
-            <div className="productdirectory p-3 rounded shadow" style={{ fontFamily: ' Nunito Sans, sans-serif', }}>
-                <table
-                    className="table table-striped"
+            <>
+                <div
+                    className="card-main  d-flex justify-content-between"
                     style={{
-                        width: "100%",
-                        borderCollapse: "collapse",
-                        textAlign: "center",
-                        border: "1px solid #ddd",
-                        fontFamily: ' Nunito Sans, sans-serif',
+                        width: "1200px",
+                        maxWidth: "100%",
+                        padding: "12px 16px",
+                        fontFamily: "Nunito Sans",
+                        display: "flex",
+                        flexDirection: "row",
+                        marginLeft: "-28px",
+                        flexWrap: "nowrap",
+                        gap: "16px",
+                        position: "relative",
                     }}
                 >
-                    <thead>
-                        <tr>
-                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
-                                SR. NO.
-                            </th>
-                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
-                                DATE
-                            </th>
-                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
-                                STATUS
-                            </th>
-                            <th style={{ padding: "10px", fontWeight: '700', border: "1px solid #ddd", fontFamily: ' Nunito Sans, sans-serif' }}>
-                                REASONS
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loading ? (
-                            <tr>
-                                <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd" }}>
-                                    <Spinner animation="border" />
-                                </td>
-                            </tr>
-                        ) : (
-                            allEntries.map((entry, index) => (
-                                <tr key={`entry-${index}`}>
-                                    <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans, sans-serif' }}>
-                                        {index + 1}
-                                    </td>
-                                    <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans, sans-serif' }}>
-                                        {entry.date ? new Date(entry.date).toLocaleDateString('en-GB') : "N/A"}
-                                    </td>
-                                    <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans, sans-serif' }}>
-                                        {entry.type}
-                                    </td>
-                                    <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans, sans-serif' }}>
-                                        {entry.reason}
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                    {/* <div
+                        className="card shadow-sm"
+                        style={{
+                            flex: "0 0 700px",
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                            borderRadius: "20px",
+                            padding: "1.5rem",
+                            margin: "10px 0 0 0",
+                            overflow: "hidden",
+                            height: "500px",
+                            fontSize: "14px"
+                        }}
+                    >
+                        <div className="productdirectory p-3 rounded shadow" style={{ fontFamily: ' Nunito Sans', }}>
+                            <table
+                                className="table table-striped"
+                                style={{
+                                    width: "100%",
+                                    borderCollapse: "collapse",
+                                    textAlign: "center",
+                                    border: "1px solid #ddd",
+                                    fontFamily: ' Nunito Sans',
+                                }}
+                            >
+                                <thead>
+                                    <tr>
+                                        <th style={{ fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
+                                            SR. NO.
+                                        </th>
+                                        <th style={{ fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
+                                            DATE
+                                        </th>
+                                        <th style={{ fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
+                                            STATUS
+                                        </th>
+                                        <th style={{ padding: "10px", fontWeight: '700', border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
+                                            REASONS
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {loading ? (
+                                        <tr>
+                                            <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd" }}>
+                                                <Spinner animation="border" />
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        allEntries.map((entry, index) => (
+                                            <tr key={`entry-${index}`}>
+                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
+                                                    {index + 1}
+                                                </td>
+                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
+                                                    {entry.date ? new Date(entry.date).toLocaleDateString('en-GB') : "N/A"}
+                                                </td>
+                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
+                                                    {entry.type}
+                                                </td>
+                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
+                                                    {entry.reason}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> */}
+                    <div style={{ padding: '20px', fontFamily: 'Nunito Sans', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
+                        {/* Lead Acknowledgment Status Card */}
+                        <div
+                            className="card shadow-sm"
+                            style={{
+                                width: "650px",
+                                backgroundColor: "#fff",
+                                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                                borderRadius: "12px",
+                                padding: "0.75rem 1rem",
+                                marginBottom: "20px",
+                                fontSize: "13px",
+                                display: "flex",
+                                alignItems: "center",
+                                minHeight: "44px"
+                            }}
+                        >
+                            <div style={{ width: "100%" }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <h6 style={{
+                                        margin: 0,
+                                        fontWeight: '700',
+                                        color: '#333',
+                                        fontSize: '14px',
+                                        whiteSpace: 'nowrap',
+                                        letterSpacing: '0.2px',
+                                        fontFamily: 'Nunito Sans',
+                                    }}>
+                                        Lead Acknowledgment Status:
+                                    </h6>
+                                    <div style={{
+                                        display: 'flex',
+                                        gap: '12px',
+                                        marginLeft: '16px',
+                                        fontFamily: 'Nunito Sans',
+                                    }}>
+                                        {['Qualified Lead', 'Disqualified Lead', 'Clarity Pending'].map((label, i) => (
+                                            <span
+                                                key={i}
+                                                style={{
+                                                    backgroundColor: '#FFFFFF',
+                                                    color: '#2E467A',
+                                                    padding: '6px 14px',
+                                                    borderRadius: '12px',
+                                                    fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    border: '1px solid #0000004D',
+                                                    minWidth: '110px',
+                                                    textAlign: 'center',
+                                                    cursor: 'pointer',
+                                                    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+                                                    transition: 'all 0.3s ease-in-out'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.target.style.background = 'linear-gradient(to right, #111A2E, #375494)';
+                                                    e.target.style.color = '#fff';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.target.style.background = '#fff';
+                                                    e.target.style.color = '#2E467A';
+                                                }}
+                                            >
+                                                {label}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* Activity Report Table Card */}
+                        <div
+                            className="card shadow-sm"
+                            style={{
+                                width: "650px",
+                                height: "420px", // Increased height
+                                backgroundColor: "#fff",
+                                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.35)", // Updated shadow
+                                borderRadius: "20px",
+                                padding: "1.5rem",
+                                fontSize: "14px",
+                                overflowY: "auto" // Add scroll if entries overflow
+                            }}
+                        >
+                            <h4 style={{
+                                fontFamily: 'Nunito Sans',
+                                fontWeight: 600, fontSize: "14px",
+                            }}
+                            >Activity Report:</h4>
+
+                            <div className="productdirectory" style={{
+                                marginTop: "20px", borderRadius: "20px", overflow: "hidden", border: "1px solid #ddd",
+                            }}>
+                                <thead>
+                                    <tr style={{
+                                        background: "linear-gradient(90deg, #111A2E 0%, #375494 100%)",
+                                    }}>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans',
+                                            fontWeight: 600,
+                                            padding: "8px 0",
+                                            // background: "linear-gradient(90deg, #111A2E 0%, #375494 100%)",
+                                            color: "#fff",
+                                            border: "none",
+                                            fontSize: "12.5px",
+                                            letterSpacing: "0.3px",
+                                            borderTopLeftRadius: "20px",
+                                            width: "10%",
+                                            textAlign: "center"
+                                        }}>
+                                            Sr.no                                        </th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans',
+                                            fontWeight: 600,
+                                            padding: "8px 0",
+                                            // background: "linear-gradient(90deg, #111A2E 0%, #375494 100%)",
+                                            color: "#fff",
+                                            border: "none",
+                                            fontSize: "12.5px",
+                                            letterSpacing: "0.3px",
+                                            width: "22%",
+                                            textAlign: "center"
+                                        }}>
+                                            Date                                        </th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans',
+                                            fontWeight: 600,
+                                            padding: "8px 0",
+                                            // background: "linear-gradient(90deg, #111A2E 0%, #375494 100%)",
+                                            color: "#fff",
+                                            border: "none",
+                                            fontSize: "12.5px",
+                                            letterSpacing: "0.3px",
+                                            width: "20%",
+                                            textAlign: "center"
+                                        }}>
+                                            Status                                        </th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans',
+                                            fontWeight: 600,
+                                            padding: "8px 0",
+                                            // background: "linear-gradient(90deg, #111A2E 0%, #375494 100%)",
+                                            color: "#fff",
+                                            border: "none",
+                                            fontSize: "12.5px",
+                                            letterSpacing: "0.3px",
+                                            borderTopRightRadius: "20px",
+                                            width: "48%",
+                                            textAlign: "center"
+                                        }}>
+                                            Reason
+                                        </th>
+                                    </tr>
+                                </thead>
+
+
+                                <tbody>
+                                    {allEntries.map((entry, index) => (
+                                        <tr key={`entry-${index}`}>
+                                            <td style={{
+                                                padding: "10px 0",
+                                                fontFamily: 'Nunito Sans',
+                                                fontSize: "12px",
+                                                border: "none",
+                                                background: "#FFFFFF",
+                                                textAlign: "center",
+                                                color: "#2E467A",
+
+                                                borderRadius: index === allEntries.length - 1 ? "0 0 0 20px" : "12px 0 0 12px"
+                                            }}>
+                                                {index + 1}
+                                            </td>
+                                            <td style={{
+                                                padding: "10px 0",
+                                                fontFamily: 'Nunito Sans',
+                                                fontSize: "12px",
+                                                border: "none",
+                                                background: "#FFFFFF",
+                                                width: "22%",
+                                                textAlign: "center",
+                                                color: "#2E467A",
+
+
+                                            }}>
+                                                {entry.date ? new Date(entry.date).toLocaleDateString('en-GB') : "N/A"}
+                                            </td>
+                                            <td style={{
+                                                padding: "10px 0",
+                                                fontFamily: 'Nunito Sans',
+                                                fontSize: "12px",
+                                                border: "none",
+                                                background: "#FFFFFF",
+                                                width: "20%",
+                                                color: "#2E467A",
+
+                                                textAlign: "center"
+                                            }}>
+                                                {entry.type}
+                                            </td>
+                                            <td style={{
+                                                padding: "10px 10px",
+                                                fontFamily: 'Nunito Sans',
+                                                fontSize: "11.5px",
+                                                border: "none",
+                                                color: "#2E467A",
+
+                                                background: "#FFFFFF",
+                                                borderRadius: index === allEntries.length - 1 ? "0 0 20px 0" : "0 12px 12px 0",
+                                                textAlign: "left",
+                                                width: "48%",
+                                                //   textAlign: "center"
+
+                                            }}>
+                                                {entry.reason}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        className="card shadow-sm"
+                        style={{
+                            flex: "0 0 485px",
+                            height: "500px", // fixed height to match left
+                            borderRadius: "20px",
+                            backgroundColor: "#fff",
+                            margin: "10px 0 10px 0px",
+                            padding: "30px",
+                            overflow: "hidden", // prevent scrollbars
+                        }}
+                    >
+                        <Rightcard />
+                    </div>
+                </div>
+            </>
         );
     };
 
@@ -478,7 +751,7 @@ const components = [
     useEffect(() => {
         // Create a combined array of all entries with their dates and types (same logic as renderTable)
         const allEntries = [];
-        
+
         // Add qualified entries
         showLeadqualified?.forEach((item, index) => {
             if (item && item.length > 0) {
@@ -531,7 +804,7 @@ const components = [
             !showLeadclearitypending?.some(item => item && item.length > 0));
 
         // Check if the first entry (most recent) is "Qualified" or "qualified"
-        const isFirstEntryQualified = allEntries.length > 0 && 
+        const isFirstEntryQualified = allEntries.length > 0 &&
             (allEntries[0].type === 'Qualified' || allEntries[0].type === 'qualified');
 
         // Enable next button if:
@@ -565,37 +838,37 @@ const components = [
                         />
                     )
                     : null} */}
-                <Popup
+                {/* <Popup
                     onSelectOption={handleSelectOption}
                     onClose={() => setShowPopup(false)}
-                />
+                /> */}
 
                 {/* Show selected option header */}
                 {selectedOption && (
-                    <div style={{ 
-                        marginBottom: '15px', 
-                        padding: '10px', 
-                        backgroundColor: '#f8f9fa', 
+                    <div style={{
+                        marginBottom: '15px',
+                        padding: '10px',
+                        backgroundColor: '#f8f9fa',
                         borderRadius: '5px',
                         border: '1px solid #dee2e6'
                     }}>
-                        <h5 style={{ 
-                            margin: 0, 
-                            color: selectedOption === 'qualified' ? '#155724' : 
-                                   selectedOption === 'clarityPending' ? '#856404' : '#721c24',
+                        <h5 style={{
+                            margin: 0,
+                            color: selectedOption === 'qualified' ? '#155724' :
+                                selectedOption === 'clarityPending' ? '#856404' : '#721c24',
                             fontFamily: 'Nunito Sans, sans-serif',
                             fontWeight: '700'
                         }}>
                             Currently Selected: {
                                 selectedOption === 'qualified' ? 'Qualified Opportunities' :
-                                selectedOption === 'clarityPending' ? 'Clarity Pending' :
-                                selectedOption === 'disqualified' ? 'Disqualified Opportunities' : ''
+                                    selectedOption === 'clarityPending' ? 'Clarity Pending' :
+                                        selectedOption === 'disqualified' ? 'Disqualified Opportunities' : ''
                             }
-                            {selectedOption === 'qualified' && Object.keys(checkedQualifiedItems).length > 0 && 
+                            {selectedOption === 'qualified' && Object.keys(checkedQualifiedItems).length > 0 &&
                                 ` (${Object.keys(checkedQualifiedItems).length} selected)`}
-                            {selectedOption === 'clarityPending' && Object.keys(checkedClarityPendingItems).length > 0 && 
+                            {selectedOption === 'clarityPending' && Object.keys(checkedClarityPendingItems).length > 0 &&
                                 ` (${Object.keys(checkedClarityPendingItems).length} selected)`}
-                            {selectedOption === 'disqualified' && Object.keys(checkedDisqualifiedItems).length > 0 && 
+                            {selectedOption === 'disqualified' && Object.keys(checkedDisqualifiedItems).length > 0 &&
                                 ` (${Object.keys(checkedDisqualifiedItems).length} selected)`}
                         </h5>
                     </div>
@@ -759,6 +1032,7 @@ const Section = ({
                         </div>
                     ))}
             </div>
+
             <ToastContainer />
         </div>
     );

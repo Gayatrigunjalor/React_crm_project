@@ -20,7 +20,7 @@ import { MdModeEdit } from "react-icons/md";
 import { MdDeleteForever } from "react-icons/md";
 import main from '../../../assets/img/icons/doc_download.svg';
 import { useAuth } from '../../../AuthContext';
-import Rightcard from "./rightcard";
+import Rightcard from "./Rightcard";
 import { useNavigate } from 'react-router-dom';
 
 import {
@@ -1513,20 +1513,20 @@ const MainSection = () => {
                         )}
 
                         <div className="d-flex justify-content-between mt-2 mb-2">
-<button
-    className="setFont p-1 btn"
-    onClick={() => handleStageSelect(currentIndex - 1)}
-    disabled={currentIndex === 0} // Only disable on first stage
-    style={{
-        width: "9rem",
-        height: "2rem",
-        fontSize: "1rem",
-        backgroundColor: "#0292E3",
-        color: 'white'
-    }}
->
-    Prev
-</button>
+                            <button
+                                className="setFont p-1 btn"
+                                onClick={() => handleStageSelect(currentIndex - 1)}
+                                disabled={currentIndex === 0} // Only disable on first stage
+                                style={{
+                                    width: "9rem",
+                                    height: "2rem",
+                                    fontSize: "1rem",
+                                    backgroundColor: "#0292E3",
+                                    color: 'white'
+                                }}
+                            >
+                                Prev
+                            </button>
                             {currentIndex < components.length - 1 && (
                                 <button
                                     className="setFont p-1 btn"
