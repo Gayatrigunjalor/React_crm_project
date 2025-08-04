@@ -195,7 +195,7 @@ width: 900px;
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 overflowX: 'auto',
-                padding: '12px 0',
+                padding: '10px 0',
                 gap: '30px',
                 fontFamily: 'Nunito Sans',
                 fontSize: '14px',
@@ -203,6 +203,7 @@ width: 900px;
                 color: '#2E467A',
                 margin: '0 10px',
                 whiteSpace: 'nowrap',
+                overflow: 'hidden',
             }}>
 
                 {/* Each section below */}

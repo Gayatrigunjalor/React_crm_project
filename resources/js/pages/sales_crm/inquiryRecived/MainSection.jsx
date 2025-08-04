@@ -66,9 +66,7 @@ const InquiredData = (props) => {
     const [productList, setProductList] = useState([]);
     const [currencyTableData, setCurrencyTableData] = useState([]);
     const [currencyOptions, setCurrencyOptions] = useState([]);
-    const handleClick = () => {
-        navigate('/sales_crm/inquiryRecived/SecondMain/4218/2695/109572404'); // Replace with your actual route
-    };
+    const { onNextStage, onPrevStage } = props;
 
     const [opportunityDetails, setOpportunityDetails] = useState({
         id: null,
@@ -1011,12 +1009,12 @@ const InquiredData = (props) => {
                             />
                         </div>
 
-                        <div style={{
+                        {/* <div style={{
                             display: "flex",
                             gap: "10px",
                             marginTop: "auto",
                             paddingTop: "1rem"
-                        }}> 
+                        }}>
                             <button
                                 style={{
                                     backgroundColor: "#E5E7EB",
@@ -1035,25 +1033,23 @@ const InquiredData = (props) => {
                                 Previous
                             </button>
                             <button
-                                style={{
-                                    background: "linear-gradient(90deg, #111A2E 0%, #375494 100%)",
-                                    color: "#FFFFFF",
-                                    border: "none",
-                                    borderRadius: "8px",
-                                    padding: "10px 20px",
-                                    fontSize: "14px",
-                                    fontWeight: "500",
-                                    cursor: "pointer",
-                                    transition: "background-color 0.2s"
-                                }}
-                                onClick={handleClick}
-
-                                onMouseOver={(e) => e.target.style.backgroundColor = "#1E3A8A"}
-                                onMouseOut={(e) => e.target.style.backgroundColor = "#2E467A"}
-                            >
-                                Next
-                            </button>
-                        </div>
+                    style={{
+                        background: "linear-gradient(90deg, #111A2E 0%, #375494 100%)",
+                        color: "#FFFFFF",
+                        border: "none",
+                        borderRadius: "8px",
+                        padding: "10px 20px",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        cursor: "pointer",
+                        transition: "background-color 0.2s"
+                    }}
+                    onClick={onNextStage}
+                    disabled={!areRequiredFieldsFilled()}
+                >
+                    Next
+                </button>
+                        </div> */}
                     </div>
 
                 </div>
@@ -1342,7 +1338,7 @@ const MainSection = () => {
                 return areRequiredFieldsFilled();
             case 1: // Lead Acknowledgment
                 return hasLeadAcknowledgment;
-            case 2: // product sourcing
+            case 2: // Product Sourcing
                 return hasProductSourcingData;
             case 3: // Price Shared
                 return hasPriceSharedData;
@@ -1354,6 +1350,7 @@ const MainSection = () => {
                 return true; // Other stages don't need validation
         }
     };
+
 
     // Modify handleStageSelect to include price shared validation message
     const handleStageSelect = (index) => {
@@ -1458,11 +1455,9 @@ const MainSection = () => {
     const handleFollowUpDetailsChange = (hasDetails) => {
         setHasFollowUpDetails(hasDetails);
     };
-
     return (
         <OpportunityProvider>
-            <style>{styles}</style>
-            <div className="d-flex flex-column dark:bg-gray-800 responsive-container" style={{ margin: "0px -16px" }}>
+            <div className="d-flex flex-column dark:bg-gray-800" style={{ margin: "0px -16px" }}>
                 <Navbar
                     currentIndex={currentIndex}
                     onStageSelect={handleStageSelect}
@@ -1473,24 +1468,16 @@ const MainSection = () => {
                     customer_id={productData.customer_id}
                 />
 
-                <div className="d-flex mt-1 flex-grow-1" style={{
-                    overflow: "hidden",
-                    minHeight: "calc(100vh - 150px)",
-                    maxHeight: "calc(100vh - 150px)"
-                }}>
+
+
+                <div className="d-flex mt-1 flex-grow-1" style={{ overflow: "hidden", height: "600px" }}>
                     {isSidebarOpen && (
                         <div className="backdrop" onClick={() => setIsSidebarOpen(false)}></div>
                     )}
 
-                    <div
-                        className="flex-grow-1 no-scrollbar"
-                        style={{
-                            padding: "0rem 1rem",
-                            width: "100%",
-                            overflow: "hidden",
-                            boxSizing: "border-box"
-                        }}
-                    >
+
+
+                    <div className="flex-grow-1 overflow-auto" style={{ padding: "0rem 1rem", width: "100%", overflowY: "auto", scrollbarWidth: 'thin' }}>
                         {isLoading ? (
                             <div className="d-flex justify-content-center align-items-center h-100">
                                 <Spinner animation="border" role="status">
@@ -1498,7 +1485,7 @@ const MainSection = () => {
                                 </Spinner>
                             </div>
                         ) : (
-                            <div className="dynamic-section" style={{ height: "100%" }}>
+                            <div className="dynamic-section">
                                 {currentIndex === 4 ? (
                                     <FifthMain onPiValidation={handlePiValidation} />
                                 ) : currentIndex === 5 ? (
@@ -1513,6 +1500,13 @@ const MainSection = () => {
                                     <CurrentComponent
                                         productData={productData}
                                         onFormCompletionUpdate={handleFormCompletionUpdate}
+                                        onNextStage={() => handleStageSelect(currentIndex + 1)}
+                                        onPrevStage={() => handleStageSelect(currentIndex - 1)}
+                                        {...(currentIndex === 4 && { onPiValidation: handlePiValidation })}
+                                        {...(currentIndex === 5 && { onFollowUpDetailsChange: handleFollowUpDetailsChange })}
+                                        {...(currentIndex === 1 && { onValidationChange: handleLeadAcknowledgmentValidation })}
+                                        {...(currentIndex === 3 && { onPriceSharedValidation: handlePriceSharedValidation })}
+                                        {...(currentIndex === 2 && { onProductSourcingValidation: handleProductSourcingValidation })}
                                     />
                                 )}
                             </div>
@@ -1524,12 +1518,11 @@ const MainSection = () => {
                                 onClick={() => handleStageSelect(currentIndex - 1)}
                                 disabled={currentIndex === 0 || userPermission.prev_stage_list !== 1}
                                 style={{
-                                    width: "clamp(6rem, 15vw, 9rem)",
+                                    width: "9rem",
                                     height: "2rem",
-                                    fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                                    color: 'white',
-                                    backgroundImage: "linear-gradient(90deg, #797C8433 20%, #D6DCEAAD 68%)",
-                                    border: "none"
+                                    fontSize: "1rem",
+                                    backgroundColor: "#0292E3",
+                                    color: 'white'
                                 }}
                             >
                                 Prev
@@ -1538,18 +1531,14 @@ const MainSection = () => {
                                 <button
                                     className="setFont p-1 btn"
                                     onClick={() => handleStageSelect(currentIndex + 1)}
-                                    disabled={!isStageValid()}
                                     style={{
-                                        width: "clamp(6rem, 15vw, 9rem)",
+                                        width: "9rem",
                                         height: "2rem",
-                                        fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                                        color: 'white',
-                                        backgroundImage: isStageValid()
-                                            ? "linear-gradient(90deg, #111A2E, #375494)"
-                                            : "linear-gradient(90deg, #111A2E, #111A2E)",
-                                        opacity: isStageValid() ? 1 : 0.6,
-                                        border: "none"
+                                        fontSize: "1rem",
+                                        backgroundColor: "#0292E3",
+                                        color: 'white'
                                     }}
+                                    disabled={!isStageValid()} // <-- Disable if not valid
                                 >
                                     Next
                                 </button>
@@ -1560,6 +1549,8 @@ const MainSection = () => {
                     {isSidebarOpen2 && (
                         <div className="backdrop" onClick={() => setIsSidebarOpen2(false)}></div>
                     )}
+
+
                 </div>
             </div>
         </OpportunityProvider>

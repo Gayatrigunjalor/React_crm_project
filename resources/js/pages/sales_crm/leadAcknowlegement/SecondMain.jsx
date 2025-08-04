@@ -4,7 +4,11 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
-
+import ProductSourcing from "../productSourcing/productSourcing";
+import PriceShared from "../PriceShared/PriceShared";
+import FifthMain from "../QuotationSend/QuotationSend";
+import DecisionAwaited from "../DecisionAwaited/DecisionAwaited";
+import VictoryStage from "../VictoryStage/VictoryStage";
 const Popup = ({ onSelectOption, onClose }) => {
     return (
         <div
@@ -108,6 +112,7 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
     const [checkedQualifiedItems, setCheckedQualifiedItems] = useState({}); // Separate state for qualified
     const [checkedDisqualifiedItems, setCheckedDisqualifiedItems] = useState({}); // Separate state for disqualified
     const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state for submit button
+    const [hasProductSourcingData, setHasProductSourcingData] = useState(false);
 
     const { leadId } = useParams();
     // const customerId = localStorage.getItem("cst_id");
