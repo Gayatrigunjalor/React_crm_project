@@ -1513,20 +1513,20 @@ const MainSection = () => {
                         )}
 
                         <div className="d-flex justify-content-between mt-2 mb-2">
-                            <button
-                                className="setFont p-1 btn"
-                                onClick={() => handleStageSelect(currentIndex - 1)}
-                                disabled={currentIndex === 0 || userPermission.prev_stage_list !== 1}
-                                style={{
-                                    width: "9rem",
-                                    height: "2rem",
-                                    fontSize: "1rem",
-                                    backgroundColor: "#0292E3",
-                                    color: 'white'
-                                }}
-                            >
-                                Prev
-                            </button>
+<button
+    className="setFont p-1 btn"
+    onClick={() => handleStageSelect(currentIndex - 1)}
+    disabled={currentIndex === 0} // Only disable on first stage
+    style={{
+        width: "9rem",
+        height: "2rem",
+        fontSize: "1rem",
+        backgroundColor: "#0292E3",
+        color: 'white'
+    }}
+>
+    Prev
+</button>
                             {currentIndex < components.length - 1 && (
                                 <button
                                     className="setFont p-1 btn"
