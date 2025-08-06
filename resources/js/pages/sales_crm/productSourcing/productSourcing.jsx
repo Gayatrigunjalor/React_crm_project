@@ -10,6 +10,8 @@ import swal from 'sweetalert';
 import { id } from "date-fns/locale";
 import { useParams } from "react-router-dom";
 import { set } from "date-fns";
+import Rightcard from "../inquiryRecived/Rightcard";
+import tabframe from "../../../assets/img/newIcons/tabframe.svg";
 
 const ThirdMain = ({ onProductSourcingValidation }) => {
     const [productDetails, setProductDetails] = useState([]);
@@ -39,6 +41,7 @@ const ThirdMain = ({ onProductSourcingValidation }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     console.log("productShow", Producshow);
+    const [activeTab, setActiveTab] = useState("not-required");
 
     useEffect(() => {
         if (onProductSourcingValidation) {
@@ -379,6 +382,29 @@ const ThirdMain = ({ onProductSourcingValidation }) => {
             alert("Failed to save product.");
         }
     };
+    const headerStyle = {
+        background: "linear-gradient(#111A2E, #375494)",
+        color: "white",
+        fontSize: "14px",
+        fontFamily: "Nunito Sans",
+        fontWeight: "700",
+        textAlign: "center",
+        verticalAlign: "middle",
+        padding: "0.75rem",
+        borderStyle: "none",
+
+    };
+
+    const cellStyle = {
+        fontFamily: "Nunito Sans",
+        fontSize: "14px",
+        textAlign: "center",
+        verticalAlign: "middle",
+        padding: "0.75rem",
+        borderStyle: "none",
+
+    };
+
 
     const placeholderStyle = `
     ::placeholder {
@@ -436,541 +462,608 @@ const ThirdMain = ({ onProductSourcingValidation }) => {
             <style>
                 {`
            *{
-            font-family: Nunito Sans, sans-serif;
+            font-family: Nunito Sans;
         //    color:red;
            }
         .setFont{
-     font-family: Nunito Sans, sans-serif;
+     font-family: Nunito Sans;
 
     }
        `}
             </style>
 
             <style>{placeholderStyle}</style>
-            <form className="d-grid gap-3">
-                <Tab.Container id="product-sourcing-tabs" defaultActiveKey="required">
-                    <Row>
-                        <Col>
-                            <Nav variant="underline">
-                                <Nav.Item className="tab1">
-                                    <Nav.Link
-                                        eventKey="required"
-                                        className="text-wrap setFont"
-                                        style={{
-                                            fontFamily: 'Nunito Sans, sans-serif',
-                                            // fontSize: '0.5rem' // Default size
-                                        }}
-                                    >
-                                        Product Sourcing Required
-                                    </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item className="tab2">
-                                    <Nav.Link
-                                        eventKey="not-required"
-                                        className="text-wrap setFont"
-                                        style={{
-                                            fontFamily: 'Nunito Sans, sans-serif',
-                                            // fontSize: '0.5rem' // Default size
-                                        }}
-                                    >
-                                        Product Sourcing Not Required
-                                    </Nav.Link>
-                                </Nav.Item>
-                            </Nav>
-                        </Col>
-                    </Row>
-
-
-                    <Tab.Content>
-                        <Tab.Pane eventKey="required">
-                            {/* <legend className="h6 d-flex align-items-center" style={{ gap: "8px", marginBottom: "5px" }}>
-                                <Button
-                                    variant="subtle-primary"
-                                    className="btnstyle setFont"
-                                    onClick={() => handleShow()} 
-                                    style={{
-                                        width: "10rem",
-                                        height: "40px",
-                                        backgroundColor: 'transparent',
-                                        border: '1px solid #3874FF',
-                                        fontFamily: 'Nunito Sans, sans-serif',
-                                        borderRadius: "8px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontSize: "0.9rem",
-                                    }}
-                                >
-                                   Create Procurement
-                                </Button>
-                               
-                            </legend> */}
-
-                            <div className="product-details" style={{ border: "1px solid #ddd", height: "fit-content" }}>
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan={9} className="text-center setFont">
-                                            <Spinner animation="border" />
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    // productDetails.filter(product => product.no_of_product_vendor === "0" || product.no_of_product_vendor === null)
-                                    productDetails
-                                        .map((productDetail, index) => (
-                                            productDetail.isRequired === null && (
-                                                <div key={index} className="product-entry p-3 mb-2 rounded">
-                                                    <div style={{ display: "flex", alignItems: "center", marginTop: "1rem" }}>
-                                                        <h6 className="setFont" style={{ margin: 0, marginRight: "1rem" }}>
-                                                            Product {index + 1}
-                                                        </h6>
-                                                        <div>
-                                                            <h6>Procurement ID:</h6> {productDetail.procuremnt_id}
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div className="row g-3 mb-3 setFont">
-                                                        {["product", "make", "model", "quantity", "target_price"].map((field) => (
-                                                            <div key={field} className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                                <label className="form-label setFont" htmlFor={field}>
-                                                                    {field.replace("_", " ")}
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    name={field}
-                                                                    value={productDetail[field] || ""}
-                                                                    onChange={(e) => handleInputChange(e, index)}
-                                                                    className="form-control form-control-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
-                                                                    placeholder={field.replace(/([A-Z])/g, " $1")}
-                                                                    style={{ fontSize: "0.85rem" }}
-                                                                    readOnly={field !== "product_code" && field !== "procurement_id"}
-                                                                />
-                                                            </div>
-                                                        ))}
-                                                        {productDetail.product_sourcing === "no" && (
-                                                            <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                                <label className="form-label setFont" htmlFor="product_code">
-                                                                    Product Code
-                                                                </label>
-                                                                <select
-                                                                    name="product_code"
-                                                                    value={productDetail.product_code || ""}
-                                                                    onChange={(e) => handleProductCodeChange(e, index)}
-                                                                    className="form-control form-control-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
-                                                                    style={{ fontSize: "0.85rem" }}
-                                                                >
-                                                                    <option value="">Select Product Code</option>
-                                                                    {productsData.map((product) => (
-                                                                        <option key={product.id} value={product.product_code}>
-                                                                            {product.product_code}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                        )}
-
-                                                        {productDetail.product_sourcing === "no" && (
-                                                            <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                                <label className="form-label setFont" htmlFor="no_of_product_vendor">
-                                                                    Product Vendor
-                                                                </label>
-                                                                <input
-                                                                    type="text"
-                                                                    name="no_of_product_vendor"
-                                                                    value={productDetail.no_of_product_vendor || ""}
-                                                                    readOnly
-                                                                    className="form-control form-control-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
-                                                                    placeholder="No Of Product Vendor"
-                                                                    style={{ fontSize: "0.85rem" }}
-                                                                />
-                                                            </div>
-                                                        )}
-
-                                                        <div className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                            <label className="form-label setFont" htmlFor={`product_sourcing_${index}`}>
-                                                                Product Sourcing
-                                                            </label>
-                                                            <select
-                                                                id={`product_sourcing_${index}`}
-                                                                className="form-select form-select-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
-                                                                value={productDetail.product_sourcing || "yes"}
-                                                                placeholder="Select"
-                                                                onChange={(e) => {
-                                                                    const value = e.target.value;
-                                                                    const isRequired = value === "yes";
-                                                                    setProductSourcing(index, isRequired);
-                                                                }}
-                                                                style={{ fontSize: "0.85rem" }}
-                                                            >
-
-                                                                <option value="">Select</option>
-                                                                <option value="yes">Required</option>
-                                                                <option value="no">Not Required</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="col-3 d-flex justify-content-center align-items-center">
-                                                        <button
-                                                            className="btn p-1 setFont"
-                                                            style={{
-                                                                borderColor: "#333",
-                                                                backgroundColor: isSaving ? "#ccc" : "#0292E3",
-                                                                color: "white",
-                                                                transition: "all 0.3s",
-                                                                width: "9rem",
-                                                                height: "2rem",
-                                                                fontSize: "1rem",
-                                                            }}
-                                                            disabled={isSaving}
-                                                            onMouseEnter={(e) => !isSaving && (e.target.style.backgroundColor = "#0056b3")}
-                                                            onMouseLeave={(e) => !isSaving && (e.target.style.backgroundColor = "#007bff")}
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                if (isSaving) return;
-                                                                // Pass the product_sourcing value from the current productDetail
-                                                                const updatedProduct = {
-                                                                    ...productDetail,
-                                                                    product_sourcing: productDetail.product_sourcing || "yes"
-                                                                };
-                                                                saveProduct(updatedProduct, index);
-                                                            }}
-                                                        >
-                                                            {isSaving ? 'Saving...' : 'Save'}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            )
-                                        ))
-
-                                )}
-                            </div>
-
-                            <h5 className="setFont mb-2" style={{ marginTop: "2.5rem" }}>Product Sourcing Required</h5>
-                            <form className="d-grid gap-1">
-                                <div style={{
-                                    width: "100%",
-                                    overflowX: "auto",
-                                    whiteSpace: "nowrap",
-                                    border: "1px solid #ddd",
-                                    scrollbarWidth: 'thin',
-                                    // padding: "10px",
-                                }}>
-                                    <table className="table table-striped"
-                                        style={{
-                                            width: "100%",
-                                            borderCollapse: "collapse",
-                                            textAlign: "center",
-                                            border: "1px solid #ccc",
-                                            fontFamily: 'Nunito Sans, sans-serif'
-                                        }}>
-                                        <thead>
-                                            <tr>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', width: "50px", border: "1px solid #ddd", }}></th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', width: "50px", border: "1px solid #ddd", }}>Mark as Done</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', width: "50px", border: "1px solid #ddd", }}>Sr No</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Procurement ID</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Product Name</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Make</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Model</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Quantity</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Target Price</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Product Code</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>No of Product Vendors</th>
-                                                {/* <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>TAT</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Assignee Name</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Attachments</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Status</th> */}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {loading ? (
-                                                <tr>
-                                                    <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd", }}>
-                                                        <Spinner animation="border" />
-                                                    </td>
-                                                </tr>
-                                            ) : !Producshow || Producshow.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan={9} className="text-center" style={{ border: "1px solid #ddd", }}>
-                                                        No Data Available
-                                                    </td>
-                                                </tr>
-                                            ) : (
-
-                                                Producshow.flat().filter(item => item.product_sourcing === "yes").map((item, index) => (
-                                                    <tr key={item.id || index}>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd" }}>
-                                                            {(!item.proc_number || item.proc_number === "N/A") && (
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={selectedProducts.some(p => p.id === item.id)}
-                                                                    onChange={() => handleSelectProduct(item)}
-                                                                />
-                                                            )}
-
-                                                        </td>
-                                                        <td style={{ border: "1px solid #ddd" }}>
-                                                            <button
-                                                                type="button"
-                                                                disabled={!item.proc_number}
-                                                                style={{
-                                                                    padding: '5px 10px',
-                                                                    backgroundColor: item.proc_number ? '#0292E3' : '#ccc',
-                                                                    color: 'white',
-                                                                    border: 'none',
-                                                                    cursor: item.proc_number ? 'pointer' : 'not-allowed'
-                                                                }}
-                                                                onClick={() => handleMarkAsDone(item)}
-
-                                                            >
-                                                                Mark as Done
-                                                            </button>
-                                                        </td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd" }} >{index + 1}</td>
-
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.proc_number || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.product_name || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.make || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.model || "N/A"}</td>
-                                                        <td style={{ border: "1px solid #ddd", }}>{item.quantity}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.target_price || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>
-                                                            {item.product_code}
-                                                        </td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>
-                                                            {item.no_of_product_vendor}
-                                                        </td>
-
-                                                    </tr>
-                                                ))
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-                            <legend
-                                className="h6 d-flex align-items-center"
-                                style={{
-                                    gap: "8px",
-                                    marginTop: "20px", // space from form
-                                    marginBottom: "5px",
-                                    whiteSpace: "nowrap", // keep text in single line
-                                    display: "flex", // ensure flexbox styling applies
-                                    alignItems: "center",
-                                }}
-                            >
-                                <Button
-                                    variant="subtle-primary"
-                                    className="btnstyle setFont"
-                                    onClick={() => handleShow()}
-                                    style={{
-                                        width: "10rem",
-                                        height: "40px",
-                                        backgroundColor: 'transparent',
-                                        border: '1px solid #3874FF',
-                                        fontFamily: 'Nunito Sans, sans-serif',
-                                        borderRadius: "8px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        fontSize: "0.9rem",
-                                    }}
-                                >
-                                    Create Procurement
-                                </Button>
-                            </legend>
-
-                            {/* <form className="d-grid gap-1">
-                                <div style={{
-                                    width: "100%",
-                                    overflowX: "auto",
-                                    whiteSpace: "nowrap",
-                                    border: "1px solid #ddd",
-                                    scrollbarWidth: 'thin',
-                                    // padding: "10px",
-                                }}>
-                                    <table className="table table-striped"
-                                        style={{
-                                            width: "100%",
-                                            borderCollapse: "collapse",
-                                            textAlign: "center",
-                                            border: "1px solid #ccc",
-                                            fontFamily: 'Nunito Sans, sans-serif'
-                                        }}>
-                                        <thead>
-                                            <tr>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', width: "50px", border: "1px solid #ddd", }}>Sr No</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Procurement ID</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Product/Service Name</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Model</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Target Cost</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>TAT</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Assignee Name</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Attachments</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {loading ? (
-                                                <tr>
-                                                    <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd", }}>
-                                                        <Spinner animation="border" />
-                                                    </td>
-                                                </tr>
-                                            ) : !productData || productData.length === 0 ? (
-                                                <tr>
-                                                    <td colSpan={9} className="text-center" style={{ border: "1px solid #ddd", }}>
-                                                        No Data Available
-                                                    </td>
-                                                </tr>
-                                            ) : (
-                                                productData.flat().map((item, index) => (
-                                                    <tr key={item.id || index}>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd" }} >{index + 1}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.proc_number || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.product_service_name || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.description || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.target_cost || "N/A"}</td>
-                                                        <td style={{ border: "1px solid #ddd", }}>{item.tat || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.assignee.name || "N/A"}</td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>
-                                                            {item.uploads && item.uploads.length > 0
-                                                                ? item.uploads.map((upload, idx) => (
-                                                                    <span key={idx}>
-                                                                        {upload.name || "N/A"}
-                                                                        {idx < item.uploads.length - 1 && ", "}
-                                                                    </span>
-                                                                ))
-                                                                : "N/A"}
-                                                        </td>
-                                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>{item.status || "N/A"}</td>
-                                                    </tr>
-                                                ))
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form> */}
-                        </Tab.Pane>
-
-                        <Tab.Pane eventKey="not-required">
-                            {/* <div className="product-details">
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan={9} className="text-center" style={{ border: "1px solid #ddd", }}>
-                                            <Spinner animation="border" />
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    productDetails.map((product, index) => (
-                                        <div key={index} className="product-entry p-3 mb-2 rounded" style={{ border: "1px solid #ddd", }}>
-                                            <h6 className="setFont">Product {index + 1}</h6>
-                                            <div className="row g-3 mb-3" >
-                                                {["product", "product_code", "no_of_product_vendor"].map((field) => (
-                                                    <div key={field} className="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                        <label className="setFont form-label" htmlFor={field}>
-                                                            {field.replace("_", " ")}
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name={field}
-                                                            value={product[field] || ""}
-                                                            onChange={(e) => handleInputChange_show(e, index)}
-                                                            className=" setFont form-control form-control-sm"
-                                                            readOnly={field !== "product_code" && field !== "no_of_product_vendor" && field !== "product_name"}
-                                                            placeholder={field.replace(/([A-Z])/g, " $1")}
-                                                            style={{ fontSize: "0.85rem", flex: "1" }}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="col-3 d-flex justify-content-center align-items-center">
-                                                <button
-                                                    className="btn p-1 setFont"
+            <div
+                className="card-main  d-flex justify-content-between"
+                style={{
+                    width: "1200px",
+                    maxWidth: "100%",
+                    padding: "12px 16px",
+                    fontFamily: "Nunito Sans",
+                    display: "flex",
+                    flexDirection: "row",
+                    marginLeft: "-28px",
+                    flexWrap: "nowrap",
+                    gap: "16px",
+                    position: "relative",
+                }}
+            >
+                <div
+                    className="card shadow-sm"
+                    style={{
+                        flex: "0 0 700px",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                        borderRadius: "20px",
+                        padding: "1.5rem",
+                        margin: "10px 0 0 0",
+                        overflow: "hidden",
+                        height: "500px",
+                        fontSize: "14px"
+                    }}
+                >
+                    <form className="d-grid gap-3">
+                        <Tab.Container id="product-sourcing-tabs" defaultActiveKey="required">
+                            <Row>
+                                <Col>
+                                    <Nav variant="underline" className="d-flex justify-content-between" style={{ borderBottom: "none" }}>
+                                        {/* Tab 1 */}
+                                        <Nav.Item className="tab1 text-center" style={{ position: "relative", flex: 1 }}>
+                                            <Nav.Link
+                                                eventKey="not-required"
+                                                className="text-wrap setFont"
+                                                style={{
+                                                    fontFamily: 'Nunito Sans, sans-serif',
+                                                    color: activeTab === "not-required" ? "#000" : "#555",
+                                                    paddingBottom: "10px",
+                                                }}
+                                            >
+                                                Product Details
+                                            </Nav.Link>
+                                            {activeTab === "not-required" && (
+                                                <img
+                                                    src={tabframe}
+                                                    alt="underline"
                                                     style={{
-
-                                                        borderColor: "#333",
-                                                        backgroundColor: " #0292E3",
-                                                        color: "white",
-                                                        transition: "all 0.3s",
-                                                        width: "9rem", height: "2rem", fontSize: "1rem"
+                                                        position: "absolute",
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "6px", // Increase height if needed
+                                                        objectFit: "cover",
                                                     }}
-                                                    onMouseEnter={(e) => (e.target.style.backgroundColor = "#0056b3")}
-                                                    onMouseLeave={(e) => (e.target.style.backgroundColor = "#007bff")}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        handleSave(product, index);
-                                                    }}
-                                                >
-                                                    Save
-                                                </button>
-
-                                            </div>
-                                        </div>
-                                    ))
-                                )}
-                            </div> */}
-
-                            <h5 className="setFont mb-2" style={{ marginTop: "0.5rem" }}>Product Details</h5>
-                            <form className="d-grid gap-1">
-                                <div style={{
-                                    width: "100%",
-                                    overflowX: "auto",
-                                    whiteSpace: "nowrap",
-                                    border: "1px solid #ddd",
-                                    scrollbarWidth: 'thin',
-                                    // padding: "10px",
-                                }}>
-                                    <table className="table tableWidth" style={{
-                                        size: "sm",
-                                        borderCollapse: "collapse",
-                                        width: "100%", // Force full width
-                                        minWidth: "100%", // Ensures it stretches on all screens
-                                        maxWidth: "100%", // Prevents it from overflowing
-                                        // border: "1px solid #ddd",
-                                        //  minWidth: "300px",
-                                    }}>
-                                        <thead>
-                                            <tr>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc", fontWeight: '700' }}>Sr No</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc", fontWeight: '700' }}>Product Code</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc", fontWeight: '700' }}>Product Name</th>
-                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc", fontWeight: '700' }}>No of Product Vendor</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {loading ? (
-                                                <tr>
-                                                    <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd", }} >
-                                                        <Spinner animation="border" />
-                                                    </td>
-                                                </tr>
-                                            ) : !Producshow || Producshow === 0 ? (
-                                                <tr>
-                                                    <td colSpan={4} className="text-center" style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd", }}>
-                                                        No Data Available
-                                                    </td>
-                                                </tr>
-                                            ) : (
-                                                Producshow.filter(product => product.product_sourcing === "no")
-                                                    .map((item, index) => (
-                                                        <tr key={item.id || index}>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', width: "10%", border: "1px solid #ddd", }}>{index + 1}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', width: "20%", border: "1px solid #ddd", }}>{item.product_code || "N/A"}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', width: "20%", border: "1px solid #ddd", }}>{item.product_name || "N/A"}</td>
-                                                            <td style={{ width: "20%", border: "1px solid #ddd", fontFamily: 'Nunito Sans, sans-serif' }}>{item.no_of_product_vendor || "N/A"}</td>
-                                                        </tr>
-                                                    ))
+                                                />
                                             )}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-                        </Tab.Pane>
-                    </Tab.Content>
-                </Tab.Container>
-            </form>
+                                        </Nav.Item>
+
+                                        {/* Tab 2 */}
+                                        <Nav.Item className="tab2 text-center" style={{ position: "relative", flex: 1 }}>
+                                            <Nav.Link
+                                                eventKey="required"
+                                                className="text-wrap setFont"
+                                                style={{
+                                                    fontFamily: 'Nunito Sans, sans-serif',
+                                                    color: activeTab === "required" ? "#000" : "#555",
+                                                    paddingBottom: "10px",
+                                                }}
+                                            >
+                                                Product Sourcing Required
+                                            </Nav.Link>
+                                            {activeTab === "required" && (
+                                                <img
+                                                    src={tabframe}
+                                                    alt="underline"
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "6px",
+                                                        objectFit: "cover",
+                                                    }}
+                                                />
+                                            )}
+                                        </Nav.Item>
+
+                                        {/* Tab 3 */}
+                                        <Nav.Item className="tab3 text-center" style={{ position: "relative", flex: 1 }}>
+                                            <Nav.Link
+                                                eventKey="not-required-2"
+                                                className="text-wrap setFont"
+                                                style={{
+                                                    fontFamily: 'Nunito Sans, sans-serif',
+                                                    color: activeTab === "not-required-2" ? "#000" : "#555",
+                                                    paddingBottom: "10px",
+                                                }}
+                                            >
+                                                Product Sourcing Not Required
+                                            </Nav.Link>
+                                            {activeTab === "not-required-2" && (
+                                                <img
+                                                    src={tabframe}
+                                                    alt="underline"
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "6px",
+                                                        objectFit: "cover",
+                                                    }}
+                                                />
+                                            )}
+                                        </Nav.Item>
+                                    </Nav>
+                                </Col>
+                            </Row>
+
+
+                            <Tab.Content>
+                                <Tab.Pane eventKey="required">
+
+
+                                    <div className="product-details" style={{ height: "fit-content" }}>
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan={9} className="text-center setFont">
+                                                    <Spinner animation="border" />
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            productDetails
+                                                .map((productDetail, index) => (
+                                                    productDetail.isRequired === null && (
+                                                        <div key={index} className="product-entry p-3 mb-2 rounded">
+                                                            <div style={{ display: "flex", alignItems: "center", marginTop: "1rem" }}>
+                                                                <h6 className="setFont" style={{ margin: 0, marginRight: "1rem" }}>
+                                                                    Product {index + 1}
+                                                                </h6>
+                                                                <div>
+                                                                    <h6>Procurement ID:</h6> {productDetail.procuremnt_id}
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div className="row g-3 mb-3 setFont">
+                                                                {["product", "make", "model", "quantity", "target_price"].map((field) => (
+                                                                    <div key={field} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                                        <label className="form-label setFont" htmlFor={field}>
+                                                                            {field.replace("_", " ")}
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            name={field}
+                                                                            value={productDetail[field] || ""}
+                                                                            onChange={(e) => handleInputChange(e, index)}
+                                                                            className="form-control form-control-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
+                                                                            placeholder={field.replace(/([A-Z])/g, " $1")}
+                                                                            style={{ fontSize: "0.85rem" }}
+                                                                            readOnly={field !== "product_code" && field !== "procurement_id"}
+                                                                        />
+                                                                    </div>
+                                                                ))}
+                                                                {productDetail.product_sourcing === "no" && (
+                                                                    <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                                        <label className="form-label setFont" htmlFor="product_code">
+                                                                            Product Code
+                                                                        </label>
+                                                                        <select
+                                                                            name="product_code"
+                                                                            value={productDetail.product_code || ""}
+                                                                            onChange={(e) => handleProductCodeChange(e, index)}
+                                                                            className="form-control form-control-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
+                                                                            style={{ fontSize: "0.85rem" }}
+                                                                        >
+                                                                            <option value="">Select Product Code</option>
+                                                                            {productsData.map((product) => (
+                                                                                <option key={product.id} value={product.product_code}>
+                                                                                    {product.product_code}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
+                                                                    </div>
+                                                                )}
+
+                                                                {productDetail.product_sourcing === "no" && (
+                                                                    <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                                        <label className="form-label setFont" htmlFor="no_of_product_vendor">
+                                                                            Product Vendor
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            name="no_of_product_vendor"
+                                                                            value={productDetail.no_of_product_vendor || ""}
+                                                                            readOnly
+                                                                            className="form-control form-control-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
+                                                                            placeholder="No Of Product Vendor"
+                                                                            style={{ fontSize: "0.85rem" }}
+                                                                        />
+                                                                    </div>
+                                                                )}
+
+                                                                <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                                    <label className="form-label setFont" htmlFor={`product_sourcing_${index}`}>
+                                                                        Product Sourcing
+                                                                    </label>
+                                                                    <select
+                                                                        id={`product_sourcing_${index}`}
+                                                                        className="form-select form-select-sm dark:bg-gray-700 dark:text-white w-100 input-responsive setFont"
+                                                                        value={productDetail.product_sourcing || "yes"}
+                                                                        placeholder="Select"
+                                                                        onChange={(e) => {
+                                                                            const value = e.target.value;
+                                                                            const isRequired = value === "yes";
+                                                                            setProductSourcing(index, isRequired);
+                                                                        }}
+                                                                        style={{ fontSize: "0.85rem" }}
+                                                                    >
+
+                                                                        <option value="">Select</option>
+                                                                        <option value="yes">Required</option>
+                                                                        <option value="no">Not Required</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="col-3 d-flex justify-content-center align-items-center">
+                                                                <button
+                                                                    className="btn p-1 setFont"
+                                                                    style={{
+                                                                        borderColor: "#333",
+                                                                        backgroundColor: isSaving ? "#ccc" : "#0292E3",
+                                                                        color: "white",
+                                                                        transition: "all 0.3s",
+                                                                        width: "9rem",
+                                                                        height: "2rem",
+                                                                        fontSize: "1rem",
+                                                                    }}
+                                                                    disabled={isSaving}
+                                                                    onMouseEnter={(e) => !isSaving && (e.target.style.backgroundColor = "#0056b3")}
+                                                                    onMouseLeave={(e) => !isSaving && (e.target.style.backgroundColor = "#007bff")}
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        if (isSaving) return;
+                                                                        // Pass the product_sourcing value from the current productDetail
+                                                                        const updatedProduct = {
+                                                                            ...productDetail,
+                                                                            product_sourcing: productDetail.product_sourcing || "yes"
+                                                                        };
+                                                                        saveProduct(updatedProduct, index);
+                                                                    }}
+                                                                >
+                                                                    {isSaving ? 'Saving...' : 'Save'}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                ))
+
+                                        )}
+                                    </div>
+
+                                    {/* <h5 className="setFont mb-2" style={{ marginTop: "2.5rem" }}>Product Sourcing Required</h5> */}
+                                    <form className="d-grid gap-1">
+                                        <div style={{
+                                            width: "100%",
+                                            overflowX: "auto",
+                                            whiteSpace: "nowrap",
+                                            borderStyle: "none",
+                                            // border: "1px solid #ddd",
+                                            scrollbarWidth: 'thin',
+                                            // padding: "10px",
+                                        }}>
+                                            {/* <table className="table table-striped"
+                                                style={{
+                                                    width: "100%",
+                                                    borderCollapse: "collapse",
+                                                    textAlign: "center",
+                                                    border: "1px solid #ccc",
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize: "14px",
+                                                    borderStyle: "none",
+
+                                                }}>
+                                                <thead >
+                                                    <tr>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}></th>
+                                                        <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', width: "50px", border: "1px solid #ddd", }}>Mark as Done</th>
+                                                        <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', width: "50px", border: "1px solid #ddd", }}>Sr No</th>
+                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Procurement ID</th>
+                                                
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Product Name</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Make</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Model</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Quantity</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Target Price</th>
+                                                        <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>Product Code</th>
+                                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', border: "1px solid #ddd", }}>No of Product Vendors</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Product Sourcing Required </th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {loading ? (
+                                                        <tr>
+                                                            <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd", }}>
+                                                                <Spinner animation="border" />
+                                                            </td>
+                                                        </tr>
+                                                    ) : !Producshow || Producshow.length === 0 ? (
+                                                        <tr>
+                                                            <td colSpan={9} className="text-center" style={{ border: "1px solid #ddd", }}>
+                                                                No Data Available
+                                                            </td>
+                                                        </tr>
+                                                    ) : (
+
+                                                        Producshow.flat().filter(item => item.product_sourcing === "yes").map((item, index) => (
+                                                            <tr key={item.id || index}>
+                                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', border: "1px solid #ddd" }}>
+                                                                    {(!item.proc_number || item.proc_number === "N/A") && (
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={selectedProducts.some(p => p.id === item.id)}
+                                                                            onChange={() => handleSelectProduct(item)}
+                                                                        />
+                                                                    )}
+
+                                                                </td>
+                                                                <td style={{ border: "1px solid #ddd" }}>
+                                                                    <button
+                                                                        type="button"
+                                                                        disabled={!item.proc_number}
+                                                                        style={{
+                                                                            padding: '5px 10px',
+                                                                            backgroundColor: item.proc_number ? '#0292E3' : '#ccc',
+                                                                            color: 'white',
+                                                                            border: 'none',
+                                                                            cursor: item.proc_number ? 'pointer' : 'not-allowed'
+                                                                        }}
+                                                                        onClick={() => handleMarkAsDone(item)}
+
+                                                                    >
+                                                                        Mark as Done
+                                                                    </button>
+                                                                </td>
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd" }} >{index + 1}</td>
+
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>{item.proc_number || "N/A"}</td>
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>{item.product_name || "N/A"}</td>
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>{item.make || "N/A"}</td>
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>{item.model || "N/A"}</td>
+                                                                <td style={{ border: "1px solid #ddd", }}>{item.quantity}</td>
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>{item.target_price || "N/A"}</td>
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>
+                                                                    {item.product_code}
+                                                                </td>
+                                                                <td style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>
+                                                                    {item.no_of_product_vendor}
+                                                                </td>
+
+                                                            </tr>
+                                                        ))
+                                                    )}
+                                                </tbody>
+                                            </table> */}
+                                            <table
+                                                className="table table-bordered table-striped"
+                                                style={{
+                                                    borderCollapse: "collapse",
+                                                    width: "100%",
+                                                    fontFamily: "Nunito Sans",
+                                                    fontSize: "14px",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                <thead>
+                                                    <tr>
+                                                        <th style={{
+                                                            background: "linear-gradient(#111A2E, #375494)",
+                                                            color: "white",
+                                                            fontSize: "14px",
+                                                            fontFamily: "Nunito Sans",
+                                                            fontWeight: "700",
+                                                            textAlign: "center",
+                                                            verticalAlign: "middle",
+                                                            padding: "0.75rem",
+                                                            borderStyle: "none",
+                                                            borderTopLeftRadius: "20px",
+
+
+                                                        }}>Product Name</th>
+                                                        <th style={headerStyle}>Make</th>
+                                                        <th style={headerStyle}>Model</th>
+                                                        <th style={headerStyle}>Quantity</th>
+                                                        <th style={headerStyle}>Target Price</th>
+                                                        <th style={{
+                                                            background: "linear-gradient(#111A2E, #375494)",
+                                                            color: "white",
+                                                            fontSize: "14px",
+                                                            fontFamily: "Nunito Sans",
+                                                            fontWeight: "700",
+                                                            textAlign: "center",
+                                                            verticalAlign: "middle",
+                                                            padding: "0.75rem",
+                                                            borderTopRightRadius: "20px",
+                                                            borderStyle: "none",
+
+
+
+                                                        }}>Product Sourcing Required</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {loading ? (
+                                                        <tr>
+                                                            <td colSpan={6} className="text-center">
+                                                                <Spinner animation="border" />
+                                                            </td>
+                                                        </tr>
+                                                    ) : !Producshow || Producshow.length === 0 ? (
+                                                        <tr>
+                                                            <td colSpan={6} className="text-center">
+                                                                No Data Available
+                                                            </td>
+                                                        </tr>
+                                                    ) : (
+                                                        Producshow.flat()
+                                                            .filter((item) => item.product_sourcing === "yes")
+                                                            .map((item, index) => (
+                                                                <tr key={item.id || index}>
+                                                                    <td style={{ ...cellStyle, maxWidth: "250px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                                        {item.product_name || "N/A"}
+                                                                    </td>
+                                                                    <td style={cellStyle}>{item.make || "N/A"}</td>
+                                                                    <td style={cellStyle}>{item.model || "N/A"}</td>
+                                                                    <td style={cellStyle}>{item.quantity || "N/A"}</td>
+                                                                    <td style={cellStyle}>{item.target_price || "N/A"}</td>
+                                                                    <td style={cellStyle}>
+                                                                        <input type="checkbox" checked readOnly />
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                    )}
+                                                </tbody>
+                                            </table>
+
+
+                                        </div>
+                                    </form>
+                                    <legend
+                                        className="h6 d-flex align-items-center"
+                                        style={{
+                                            gap: "8px",
+                                            marginTop: "20px", // space from form
+                                            marginBottom: "5px",
+                                            whiteSpace: "nowrap", // keep text in single line
+                                            display: "flex", // ensure flexbox styling applies
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        {/* <Button
+                                            variant="subtle-primary"
+                                            className="btnstyle setFont"
+                                            onClick={() => handleShow()}
+                                            style={{
+                                                width: "10rem",
+                                                height: "40px",
+                                                backgroundColor: 'transparent',
+                                                border: '1px solid #142346ff',
+                                                fontFamily: 'Nunito Sans',
+                                                borderRadius: "8px",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                fontSize: "0.9rem",
+                                            }}
+                                        >
+                                            Create Procurement
+                                        </Button> */}
+                                    </legend>
+
+
+                                </Tab.Pane>
+
+                                <Tab.Pane eventKey="not-required">
+
+
+                                    {/* <h5 className="setFont mb-2" style={{ marginTop: "0.5rem" }}>Product Details</h5> */}
+                                    <form className="d-grid gap-1">
+                                        <div style={{
+                                            width: "100%",
+                                            overflowX: "auto",
+                                            whiteSpace: "nowrap",
+                                            border: "1px solid #ddd",
+                                            scrollbarWidth: 'thin',
+                                            // padding: "10px",
+                                        }}>
+                                            <table className="table tableWidth" style={{
+                                                size: "sm",
+                                                borderCollapse: "collapse",
+                                                width: "100%", // Force full width
+                                                minWidth: "100%", // Ensures it stretches on all screens
+                                                maxWidth: "100%", // Prevents it from overflowing
+                                                // border: "1px solid #ddd",
+                                                //  minWidth: "300px",
+                                            }}>
+                                                <thead>
+                                                    <tr>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Sr No</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Product Code</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>Product Name</th>
+                                                        <th style={{
+                                                            background: 'linear-gradient(#111A2E, #375494)', color: 'white', fontSize: "14px", fontFamily: 'Nunito Sans', fontWeight: '700'
+                                                        }}>No of Product Vendor</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {loading ? (
+                                                        <tr>
+                                                            <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd", }} >
+                                                                <Spinner animation="border" />
+                                                            </td>
+                                                        </tr>
+                                                    ) : !Producshow || Producshow === 0 ? (
+                                                        <tr>
+                                                            <td colSpan={4} className="text-center" style={{ fontFamily: 'Nunito Sans', border: "1px solid #ddd", }}>
+                                                                No Data Available
+                                                            </td>
+                                                        </tr>
+                                                    ) : (
+                                                        Producshow.filter(product => product.product_sourcing === "no")
+                                                            .map((item, index) => (
+                                                                <tr key={item.id || index}>
+                                                                    <td style={{ fontFamily: 'Nunito Sans', width: "10%", border: "1px solid #ddd", }}>{index + 1}</td>
+                                                                    <td style={{ fontFamily: 'Nunito Sans', width: "20%", border: "1px solid #ddd", }}>{item.product_code || "N/A"}</td>
+                                                                    <td style={{ fontFamily: 'Nunito Sans', width: "20%", border: "1px solid #ddd", }}>{item.product_name || "N/A"}</td>
+                                                                    <td style={{ width: "20%", border: "1px solid #ddd", fontFamily: 'Nunito Sans' }}>{item.no_of_product_vendor || "N/A"}</td>
+                                                                </tr>
+                                                            ))
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </Tab.Pane>
+                            </Tab.Content>
+                        </Tab.Container>
+                    </form>
+                </div>
+                <div
+                    className="card shadow-sm"
+                    style={{
+                        flex: "0 0 485px",
+                        height: "500px", // fixed height to match left
+                        borderRadius: "20px",
+                        backgroundColor: "#fff",
+                        margin: "10px 0 10px 0px",
+                        padding: "30px",
+                        overflow: "hidden", // prevent scrollbars
+                    }}
+                >
+                    <Rightcard />
+                </div>
+            </div>
             {showModal && (
                 <ProcurementsModal
                     quoteId={selectedQuoteId}

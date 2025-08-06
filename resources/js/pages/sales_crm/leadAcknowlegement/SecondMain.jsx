@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../axios";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Modal } from "react-bootstrap";
 import ProductSourcing from "../productSourcing/productSourcing";
 import PriceShared from "../PriceShared/PriceShared";
 import FifthMain from "../QuotationSend/QuotationSend";
 import DecisionAwaited from "../DecisionAwaited/DecisionAwaited";
 import VictoryStage from "../VictoryStage/VictoryStage";
 import Rightcard from "../inquiryRecived/Rightcard";
+import Qualified from "../leadAcknowlegement/Qualified";
+import Disqualified from "../leadAcknowlegement/Disqualified";
+import Claritypending from "../leadAcknowlegement/Claritypending";
 // const Popup = ({ onSelectOption, onClose }) => {
 //     return (
 //         <div
@@ -101,7 +103,6 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
     const [showSubmit, setSubmit] = useState(false);
     const [selectedData, setSelectedData] = useState([]);
     const [showButton, setShowButton] = useState(true);
-    const [showPopup, setShowPopup] = useState(true);
     const [showLeadqualified, setLeadqualified] = useState([]);
     const [showDateCreated, setDateCreated] = useState([]);
     const [showLeaddisqualified, setLeaddisqualified] = useState([]);
@@ -114,8 +115,14 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
     const [checkedDisqualifiedItems, setCheckedDisqualifiedItems] = useState({}); // Separate state for disqualified
     const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state for submit button
     const [hasProductSourcingData, setHasProductSourcingData] = useState(false);
-
+    const [selectedStatus, setSelectedStatus] = useState(null);
     const { leadId } = useParams();
+    const [showQualified, setShowQualified] = useState(false);
+    const [showDisqualified, setShowDisqualified] = useState(false);
+    const [showClarityPending, setShowClarityPending] = useState(false);
+
+    const [showPopup, setShowPopup] = useState(false); // State for popup visibility
+
     // const customerId = localStorage.getItem("cst_id");
     const { customerId } = useParams();
     console.log('lead and customer ids', leadId, customerId);
@@ -237,10 +244,12 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
     const handleSelectOption = (option) => {
         localStorage.setItem("SelectedItemOption", option);
         setSelectedOption(option);
-        setShowPopup(false);
         setShowButton(false);
         setSubmit(true);
         clearAllCheckboxStates();
+    };
+    const handleStatusClick = (status) => {
+        setSelectedStatus(status);
     };
 
     const selectedMenuOption = localStorage.getItem("SelectedItemOption");
@@ -415,6 +424,30 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
 
         // Sort entries by date
         allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const badgeStyle = {
+            backgroundColor: '#FFFFFF',
+            color: '#2E467A',
+            padding: '6px 14px',
+            borderRadius: '12px',
+            fontSize: '12px',
+            fontWeight: '500',
+            border: '1px solid #0000004D',
+            minWidth: '110px',
+            textAlign: 'center',
+            cursor: 'pointer',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease-in-out'
+        };
+
+        const hoverOn = (e) => {
+            e.target.style.background = 'linear-gradient(to right, #111A2E, #375494)';
+            e.target.style.color = '#fff';
+        };
+
+        const hoverOff = (e) => {
+            e.target.style.background = '#fff';
+            e.target.style.color = '#2E467A';
+        };
 
         return (
             <>
@@ -433,81 +466,11 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
                         position: "relative",
                     }}
                 >
-                    {/* <div
-                        className="card shadow-sm"
-                        style={{
-                            flex: "0 0 700px",
-                            backgroundColor: "#fff",
-                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-                            borderRadius: "20px",
-                            padding: "1.5rem",
-                            margin: "10px 0 0 0",
-                            overflow: "hidden",
-                            height: "500px",
-                            fontSize: "14px"
-                        }}
-                    >
-                        <div className="productdirectory p-3 rounded shadow" style={{ fontFamily: ' Nunito Sans', }}>
-                            <table
-                                className="table table-striped"
-                                style={{
-                                    width: "100%",
-                                    borderCollapse: "collapse",
-                                    textAlign: "center",
-                                    border: "1px solid #ddd",
-                                    fontFamily: ' Nunito Sans',
-                                }}
-                            >
-                                <thead>
-                                    <tr>
-                                        <th style={{ fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
-                                            SR. NO.
-                                        </th>
-                                        <th style={{ fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
-                                            DATE
-                                        </th>
-                                        <th style={{ fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ddd" }}>
-                                            STATUS
-                                        </th>
-                                        <th style={{ padding: "10px", fontWeight: '700', border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
-                                            REASONS
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {loading ? (
-                                        <tr>
-                                            <td colSpan={4} className="text-center" style={{ border: "1px solid #ddd" }}>
-                                                <Spinner animation="border" />
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        allEntries.map((entry, index) => (
-                                            <tr key={`entry-${index}`}>
-                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
-                                                    {index + 1}
-                                                </td>
-                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
-                                                    {entry.date ? new Date(entry.date).toLocaleDateString('en-GB') : "N/A"}
-                                                </td>
-                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
-                                                    {entry.type}
-                                                </td>
-                                                <td style={{ padding: "8px", border: "1px solid #ddd", fontFamily: ' Nunito Sans' }}>
-                                                    {entry.reason}
-                                                </td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div> */}
+
                     <div style={{ padding: '20px', fontFamily: 'Nunito Sans', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
                         {/* Lead Acknowledgment Status Card */}
-                        <div
-                            className="card shadow-sm"
+                        <div className="card shadow-sm"
                             style={{
                                 width: "650px",
                                 backgroundColor: "#fff",
@@ -534,46 +497,53 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
                                     }}>
                                         Lead Acknowledgment Status:
                                     </h6>
+
                                     <div style={{
                                         display: 'flex',
                                         gap: '12px',
                                         marginLeft: '16px',
                                         fontFamily: 'Nunito Sans',
                                     }}>
-                                        {['Qualified Lead', 'Disqualified Lead', 'Clarity Pending'].map((label, i) => (
+                                        {/* Qualified Lead */}
+                                        <div>
                                             <span
-                                                key={i}
-                                                style={{
-                                                    backgroundColor: '#FFFFFF',
-                                                    color: '#2E467A',
-                                                    padding: '6px 14px',
-                                                    borderRadius: '12px',
-                                                    fontSize: '12px',
-                                                    fontWeight: '500',
-                                                    border: '1px solid #0000004D',
-                                                    minWidth: '110px',
-                                                    textAlign: 'center',
-                                                    cursor: 'pointer',
-                                                    boxShadow: '0 1px 4px rgba(0,0,0,0.1)',
-                                                    transition: 'all 0.3s ease-in-out'
-                                                }}
-                                                onMouseEnter={(e) => {
-                                                    e.target.style.background = 'linear-gradient(to right, #111A2E, #375494)';
-                                                    e.target.style.color = '#fff';
-                                                }}
-                                                onMouseLeave={(e) => {
-                                                    e.target.style.background = '#fff';
-                                                    e.target.style.color = '#2E467A';
-                                                }}
+                                                style={badgeStyle}
+                                                onClick={() => setShowQualified(true)}
+                                                onMouseEnter={(e) => hoverOn(e)}
+                                                onMouseLeave={(e) => hoverOff(e)}
                                             >
-                                                {label}
+                                                Qualified Lead
                                             </span>
-                                        ))}
+                                        </div>
+
+                                        {/* Disqualified Lead */}
+                                        <div>
+                                            <span
+                                                style={badgeStyle}
+                                                onClick={() => setShowDisqualified(true)}
+                                                onMouseEnter={(e) => hoverOn(e)}
+                                                onMouseLeave={(e) => hoverOff(e)}
+                                            >
+                                                Disqualified Lead
+                                            </span>
+                                        </div>
+
+                                        {/* Clarity Pending */}
+                                        <div>
+                                            <span
+                                                style={badgeStyle}
+                                                onClick={() => setShowClarityPending(true)}
+                                                onMouseEnter={(e) => hoverOn(e)}
+                                                onMouseLeave={(e) => hoverOff(e)}
+                                            >
+                                                Clarity Pending
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
+
 
                         {/* Activity Report Table Card */}
                         <div
@@ -852,6 +822,7 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
                         borderRadius: '5px',
                         border: '1px solid #dee2e6'
                     }}>
+
                         <h5 style={{
                             margin: 0,
                             color: selectedOption === 'qualified' ? '#155724' :
@@ -921,7 +892,41 @@ const SecondMain = ({ lead_id, customer_id, onValidationChange }) => {
                         />
                     </div>
                 )}
-
+                <Modal show={showQualified} onHide={() => setShowQualified(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Qualified Opportunities</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Qualified onClose={() => setShowQualified(false)} />
+                    </Modal.Body>
+                </Modal>
+                <Modal show={showDisqualified} onHide={() => setShowDisqualified(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Disqualified Opportunities</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Disqualified onClose={() => setShowDisqualified(false)} />
+                    </Modal.Body>
+                </Modal>
+                <Modal show={showClarityPending} onHide={() => setShowClarityPending(false)}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Clarity Pending</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Claritypending onClose={() => setShowClarityPending(false)} />
+                    </Modal.Body>
+                </Modal>
+                {/* <style>
+                    {`
+        .modal-backdrop {
+            background-color: rgba(255, 255, 255, 0.97); 
+        }
+        .modal-content {
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        }
+    `}
+                </style> */}
                 {/* <hr></hr> */}
                 {showSubmit && (
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>

@@ -9,6 +9,7 @@ import { Spinner } from "react-bootstrap";
 import { useOpportunity } from "../../../context/OpportunityContext";
 // import { cu } from "@fullcalendar/core/internal-common";
 import { useParams } from "react-router-dom";
+import Rightcard from "../inquiryRecived/Rightcard";
 
 
 
@@ -32,6 +33,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
     const { triggerProductPriceRefresh } = useOpportunity();
     const [currencyTableData, setCurrencyTableData] = useState([]);
     const [error, setError] = useState(null);
+    const [activeTab, setActiveTab] = useState('sharePrices');
 
     const formatDate = (dateString) => {
         if (!dateString) {
@@ -222,7 +224,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
     const handleUpdateClick = async () => {
         // Extract only the numeric value for quoted_price
         const numericPrice = updatedPrice.replace(/[^\d]/g, '');
-        
+
         // Validate that quoted price is not empty
         if (!numericPrice || numericPrice.trim() === '' || parseInt(numericPrice) <= 0) {
             toast("Please enter a valid quoted price (greater than 0) before updating", "error");
@@ -328,230 +330,478 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
     };
 
     return (
-        <div className="p-1">
+        <div
+            className="card-main  d-flex justify-content-between"
+            style={{
+                width: "1200px",
+                maxWidth: "100%",
+                padding: "12px 16px",
+                fontFamily: "Nunito Sans",
+                display: "flex",
+                flexDirection: "row",
+                marginLeft: "-28px",
+                flexWrap: "nowrap",
+                gap: "16px",
+                position: "relative",
+            }}
+        >
             <div
-                className="mb-1"
+                className="card shadow-sm"
                 style={{
-                    fontSize: "0.85rem",
-                    color: "#6c757d",
-                    textAlign: "left",
+                    flex: "0 0 700px",
+                    backgroundColor: "#fff",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                    borderRadius: "20px",
+                    padding: "1.5rem",
+                    margin: "10px 0 0 0",
+                    overflow: "hidden",
+                    height: "500px",
+                    fontSize: "14px"
                 }}
             >
-                <h5 style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Product List</h5>
-            </div>
-            <form className="d-grid gap-1">
-                <div style={{
-                    width: "100%",
-                    overflowX: "auto",
-                    whiteSpace: "nowrap",
-                    padding: "5px",
-                    scrollbarWidth: 'thin',
-                }}>
-                    <table className="table table-striped"
-                        style={{
-                            width: "100%",
-                            borderCollapse: "collapse",
-                            textAlign: "center",
-                            border: "1px solid #ccc",
-                            fontFamily: 'Nunito Sans, sans-serif'
-                        }}>
-                        <thead >
-                            <tr>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Sr No</th>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Product Name</th>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Make</th>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Model</th>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Quantity</th>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Target Price</th>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Quoted Price</th>
-                                <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Currency</th>
-                                {/* <th>Symbol</th> */}
-                                <th style={{ padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {loading ? (
-                                <tr>
-                                    <td colSpan={4} className="text-center" style={{ border: "1px solid #ccc" }}>
-                                        <Spinner animation="border" /> {/* Loader */}
-                                    </td>
-                                </tr>
-                            ) : (
-                                editedProductData.map((item, index) => (
-                                    <tr key={index}>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{index + 1}</td>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.product || "N/A"}</td>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.make || "N/A"}</td>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.model || "N/A"}</td>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.quantity || "N/A"}</td>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.target_price || "N/A"}</td>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
-                                            {editIndex === index ? (
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    value={updatedPrice}
-                                                    // placeholder={priceSharedData[index]?.quoted_price || "N/A"}
-                                                    placeholder="Enter Quoted Price"
-                                                    onChange={handlePriceChange}
-                                                    style={{ width: '110px' }}
-                                                    required
-                                                />
-                                            ) : (
-                                                <span style={{ width: '110px' }}>
-                                                    {item.quoted_price ? `${selectedCurrency[index]?.symbol || ""} ${item.quoted_price}` : "Click Edit to add quoted price"}
-                                                </span>
-                                            )}
-                                        </td>
-                                        <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
-
-                                            {editIndex === index ? (
-                                                <Form.Select
-                                                    style={{ width: '200px' }}
-                                                    value={selectedCurrency[index]?.name || ""}
-                                                    onChange={(e) => handleCurrencyChange(index, e.target.value)}
-                                                    required
-                                                >
-                                                    <option value="">Select Currency</option>
-                                                    {currencyTableData.map((currency, idx) => (
-                                                        <option key={currency.id} value={currency.name}>
-                                                            {currency.name} - {currency.symbol}
-                                                        </option>
-                                                    ))}
-                                                </Form.Select>
-
-
-                                            ) : (
-                                                <span style={{ width: '110px', fontFamily: 'Nunito Sans, sans-serif' }}>
-                                                    {"Click Edit to add currency"}
-                                                </span>
-                                            )}
-
-
-                                        </td>
-                                        <td>
-                                            {editIndex === index ? (
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-success"
-                                                    onClick={handleUpdateClick}
-                                                    style={{ backgroundColor: '#0097EB', fontFamily: 'Nunito Sans, sans-serif' }}
-                                                >
-                                                    Update
-                                                </button>
-                                            ) : (
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-primary"
-                                                    onClick={() =>
-                                                        handleEditClick(index)
-                                                    }
-                                                    style={{ backgroundColor: '#25B003', fontFamily: 'Nunito Sans, sans-serif' }}
-                                                >
-                                                    Edit
-                                                </button>
-                                            )}
-                                        </td>
-
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-                <Modal show={showModal} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit Quoted Price</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group controlId="quotedPrice">
-                                <Form.Label>Quoted Price</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    value={quotedPrice}
-                                    onChange={(e) =>
-                                        setQuotedPrice(e.target.value)
-                                    }
-                                    placeholder="Enter new quoted price"
-                                />
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={handleSubmit}>
-                            Save Changes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-                <br />
-
-                <div className="productdirectory rounded" style={{ fontFamily: 'Nunito Sans, sans-serif' }}>
+                <div className="p-1">
                     <div
-                        className="mb-2 mt-1"
+                        className="mb-1"
                         style={{
                             fontSize: "0.85rem",
                             color: "#6c757d",
                             textAlign: "left",
                         }}
                     >
-                        <h5 style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Activity Report</h5>
+                        {/* <h5 style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Product List</h5> */}
                     </div>
-                    <div style={{ overflowX: 'auto', maxWidth: '100%', scrollbarWidth: 'thin', }}>
-                        <table className="table table-striped" style={{
+                    <form className="d-grid gap-1">
+                        <div style={{
                             width: "100%",
-                            borderCollapse: "collapse",
-                            textAlign: "center",
-                            border: "1px solid #ccc",
-                            fontFamily: 'Nunito Sans, sans-serif'
+                            overflowX: "auto",
+                            whiteSpace: "nowrap",
+                            padding: "5px",
+                            scrollbarWidth: 'thin',
                         }}>
-                            <thead>
+                            <div style={{ width: '100%' }}>
+                                {/* Tab Header */}
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    borderBottom: '1px solid #ccc',
+                                    marginBottom: '20px'
+                                }}>
 
-                                <tr>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Product Name</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Updated Date</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Quoted Price</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Currency</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
+                                    <button
+                                        onClick={() => setActiveTab('sharePrices')}
+                                        style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            fontWeight: 'bold',
+                                            fontSize: '16px',
+                                            padding: '10px 20px',
+                                            color: activeTab === 'sharePrices' ? '#111A2E' : '#999',
+                                            borderBottom: activeTab === 'sharePrices' ? '3px solid #111A2E' : 'none',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        Share Prices
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab('pricedShared')}
+                                        style={{
+                                            background: 'none',
+                                            border: 'none',
+                                            fontWeight: 'bold',
+                                            fontSize: '16px',
+                                            padding: '10px 20px',
+                                            color: activeTab === 'pricedShared' ? '#111A2E' : '#999',
+                                            borderBottom: activeTab === 'pricedShared' ? '3px solid #111A2E' : 'none',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        Priced Shared
+                                    </button>
+
+
+                                </div>
+                                {/* Tab Content */}
+                                {activeTab === 'sharePrices' && (
+                                    <div>
+                                        {/* Your existing "Share Prices" table here */}
+                                    </div>
+                                )}
+
+                                {activeTab === 'pricedShared' && (
+                                    <div>
+                                        <table className="table table-striped"
+                                            style={{
+                                                width: "100%",
+                                                borderCollapse: "collapse",
+                                                textAlign: "center",
+                                                border: "1px solid #ccc",
+                                                borderStyle: "none",
+                                                fontFamily: 'Nunito Sans'
+                                            }}>
+                                            <thead >
+                                                <tr>
+                                                    {/* <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)",color: "#fff", fontWeight: "bold"
+                                        }}>Sr No</th> */}
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Product Name</th>
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Make</th>
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Model</th>
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Quality</th>
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Target Price</th>
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Quoted Price</th>
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Currency</th>
+                                                    {/* <th>Symbol</th> */}
+                                                    <th style={{
+                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                                    }}>Submit</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {loading ? (
+                                                    <tr>
+                                                        <td colSpan={4} className="text-center" style={{ border: "1px solid #ccc" }}>
+                                                            <Spinner animation="border" /> {/* Loader */}
+                                                        </td>
+                                                    </tr>
+                                                ) : (
+                                                    editedProductData.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{index + 1}</td>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.product || "N/A"}</td>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.make || "N/A"}</td>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.model || "N/A"}</td>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.quantity || "N/A"}</td>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.target_price || "N/A"}</td>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
+                                                                {editIndex === index ? (
+                                                                    <input
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        value={updatedPrice}
+                                                                        // placeholder={priceSharedData[index]?.quoted_price || "N/A"}
+                                                                        placeholder="Enter Quoted Price"
+                                                                        onChange={handlePriceChange}
+                                                                        style={{ width: '110px' }}
+                                                                        required
+                                                                    />
+                                                                ) : (
+                                                                    <span style={{ width: '110px' }}>
+                                                                        {item.quoted_price ? `${selectedCurrency[index]?.symbol || ""} ${item.quoted_price}` : "Click Edit to add quoted price"}
+                                                                    </span>
+                                                                )}
+                                                            </td>
+                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
+
+                                                                {editIndex === index ? (
+                                                                    <Form.Select
+                                                                        style={{ width: '200px' }}
+                                                                        value={selectedCurrency[index]?.name || ""}
+                                                                        onChange={(e) => handleCurrencyChange(index, e.target.value)}
+                                                                        required
+                                                                    >
+                                                                        <option value="">Select Currency</option>
+                                                                        {currencyTableData.map((currency, idx) => (
+                                                                            <option key={currency.id} value={currency.name}>
+                                                                                {currency.name} - {currency.symbol}
+                                                                            </option>
+                                                                        ))}
+                                                                    </Form.Select>
+
+
+                                                                ) : (
+                                                                    <span style={{ width: '110px', fontFamily: 'Nunito Sans, sans-serif' }}>
+                                                                        {"Click Edit to add currency"}
+                                                                    </span>
+                                                                )}
+
+
+                                                            </td>
+                                                            <td>
+                                                                {editIndex === index ? (
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-success"
+                                                                        onClick={handleUpdateClick}
+                                                                        style={{ backgroundColor: '#0097EB', fontFamily: 'Nunito Sans, sans-serif' }}
+                                                                    >
+                                                                        Update
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-primary"
+                                                                        onClick={() =>
+                                                                            handleEditClick(index)
+                                                                        }
+                                                                        style={{ backgroundColor: '#25B003', fontFamily: 'Nunito Sans, sans-serif' }}
+                                                                    >
+                                                                        Edit
+                                                                    </button>
+                                                                )}
+                                                            </td>
+
+                                                        </tr>
+                                                    ))
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+                            <table className="table table-striped"
+                                style={{
+                                    width: "100%",
+                                    borderCollapse: "collapse",
+                                    textAlign: "center",
+                                    border: "1px solid #ccc",
+                                    borderStyle: "none",
+                                    fontFamily: 'Nunito Sans'
+                                }}>
+                                <thead >
                                     <tr>
-                                        <td colSpan={4} className="text-center" style={{ padding: "8px", border: "1px solid #ccc" }}>
-                                            <Spinner animation="border" /> {/* Loader */}
-                                        </td>
+                                        {/* <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)",color: "#fff", fontWeight: "bold"
+                                        }}>Sr No</th> */}
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Product Name</th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Make</th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Model</th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Quality</th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Target Price</th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Quoted Price</th>
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Currency</th>
+                                        {/* <th>Symbol</th> */}
+                                        <th style={{
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                        }}>Submit</th>
                                     </tr>
-                                ) : (
-                                    priceSharedData.map((item, index) => (
-                                        <tr key={index}>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.product || "N/A"}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{formatDate(item.updated_at || "N/A")}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
-                                                {item.quoted_price || "N/A"}
-                                                {item.currency === "USD" ? "$" : item.currency}
-                                            </td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.currency || "N/A"}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
-                                                <FaTrash
-                                                    style={{ cursor: "pointer", color: "red" }}
-                                                    onClick={() => handleDelete(item.id)} // assuming `item.id` is the identifier
-                                                    title="Delete"
-                                                />
+                                </thead>
+                                <tbody>
+                                    {loading ? (
+                                        <tr>
+                                            <td colSpan={4} className="text-center" style={{ border: "1px solid #ccc" }}>
+                                                <Spinner animation="border" /> {/* Loader */}
                                             </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                    ) : (
+                                        editedProductData.map((item, index) => (
+                                            <tr key={index}>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{index + 1}</td>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.product || "N/A"}</td>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.make || "N/A"}</td>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.model || "N/A"}</td>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.quantity || "N/A"}</td>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.target_price || "N/A"}</td>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
+                                                    {editIndex === index ? (
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            value={updatedPrice}
+                                                            // placeholder={priceSharedData[index]?.quoted_price || "N/A"}
+                                                            placeholder="Enter Quoted Price"
+                                                            onChange={handlePriceChange}
+                                                            style={{ width: '110px' }}
+                                                            required
+                                                        />
+                                                    ) : (
+                                                        <span style={{ width: '110px' }}>
+                                                            {item.quoted_price ? `${selectedCurrency[index]?.symbol || ""} ${item.quoted_price}` : "Click Edit to add quoted price"}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
 
-            </form>
-            <ToastContainer />
+                                                    {editIndex === index ? (
+                                                        <Form.Select
+                                                            style={{ width: '200px' }}
+                                                            value={selectedCurrency[index]?.name || ""}
+                                                            onChange={(e) => handleCurrencyChange(index, e.target.value)}
+                                                            required
+                                                        >
+                                                            <option value="">Select Currency</option>
+                                                            {currencyTableData.map((currency, idx) => (
+                                                                <option key={currency.id} value={currency.name}>
+                                                                    {currency.name} - {currency.symbol}
+                                                                </option>
+                                                            ))}
+                                                        </Form.Select>
+
+
+                                                    ) : (
+                                                        <span style={{ width: '110px', fontFamily: 'Nunito Sans, sans-serif' }}>
+                                                            {"Click Edit to add currency"}
+                                                        </span>
+                                                    )}
+
+
+                                                </td>
+                                                <td>
+                                                    {editIndex === index ? (
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-success"
+                                                            onClick={handleUpdateClick}
+                                                            style={{ backgroundColor: '#0097EB', fontFamily: 'Nunito Sans, sans-serif' }}
+                                                        >
+                                                            Update
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            type="button"
+                                                            className="btn btn-primary"
+                                                            onClick={() =>
+                                                                handleEditClick(index)
+                                                            }
+                                                            style={{ backgroundColor: '#25B003', fontFamily: 'Nunito Sans, sans-serif' }}
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                    )}
+                                                </td>
+
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                        <Modal show={showModal} onHide={handleClose}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Edit Quoted Price</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form>
+                                    <Form.Group controlId="quotedPrice">
+                                        <Form.Label>Quoted Price</Form.Label>
+                                        <Form.Control
+                                            type="number"
+                                            value={quotedPrice}
+                                            onChange={(e) =>
+                                                setQuotedPrice(e.target.value)
+                                            }
+                                            placeholder="Enter new quoted price"
+                                        />
+                                    </Form.Group>
+                                </Form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleClose}>
+                                    Close
+                                </Button>
+                                <Button variant="primary" onClick={handleSubmit}>
+                                    Save Changes
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                        <br />
+
+                        <div className="productdirectory rounded" style={{ fontFamily: 'Nunito Sans, sans-serif' }}>
+                            <div
+                                className="mb-2 mt-1"
+                                style={{
+                                    fontSize: "0.85rem",
+                                    color: "#6c757d",
+                                    textAlign: "left",
+                                }}
+                            >
+                                <h5 style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Activity Report</h5>
+                            </div>
+                            <div style={{ overflowX: 'auto', maxWidth: '100%', scrollbarWidth: 'thin', }}>
+                                <table className="table table-striped" style={{
+                                    width: "100%",
+                                    borderCollapse: "collapse",
+                                    textAlign: "center",
+                                    border: "1px solid #ccc",
+                                    fontFamily: 'Nunito Sans, sans-serif'
+                                }}>
+                                    <thead>
+
+                                        <tr>
+                                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Product Name</th>
+                                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Updated Date</th>
+                                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Quoted Price</th>
+                                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Currency</th>
+                                            <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan={4} className="text-center" style={{ padding: "8px", border: "1px solid #ccc" }}>
+                                                    <Spinner animation="border" /> {/* Loader */}
+                                                </td>
+                                            </tr>
+                                        ) : (
+                                            priceSharedData.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.product || "N/A"}</td>
+                                                    <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{formatDate(item.updated_at || "N/A")}</td>
+                                                    <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
+                                                        {item.quoted_price || "N/A"}
+                                                        {item.currency === "USD" ? "$" : item.currency}
+                                                    </td>
+                                                    <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.currency || "N/A"}</td>
+                                                    <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
+                                                        <FaTrash
+                                                            style={{ cursor: "pointer", color: "red" }}
+                                                            onClick={() => handleDelete(item.id)} // assuming `item.id` is the identifier
+                                                            title="Delete"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </form>
+                    <ToastContainer />
+                </div>
+            </div>
+            <div
+                className="card shadow-sm"
+                style={{
+                    flex: "0 0 485px",
+                    height: "500px", // fixed height to match left
+                    borderRadius: "20px",
+                    backgroundColor: "#fff",
+                    margin: "10px 0 10px 0px",
+                    padding: "30px",
+                    overflow: "hidden", // prevent scrollbars
+                }}
+            >
+                <Rightcard />
+            </div>
         </div>
     );
 };
