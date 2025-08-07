@@ -1,34 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import edit from "../../../assets/img/newIcons/edit.svg";
 import deleteIcon from "../../../assets/img/newIcons/delete.svg";
+import axiosInstance from "../../../axios";
 
-const ContactDirectory  = ({ onClose }) => {
-  const tableData = [
-    {
-      srNo: 1,
-      productName: "Non-Contact Infrared Forehead Temperature Measuring Device",
-      make: "Thermo Fisher Scientific",
-      model: "MA02",
-      qty: 10,
-      targetPrice: "$75000.00"
-    },
-    {
-      srNo: 2,
-      productName: "Advanced Non-Contact Infrared Forehead Thermometer With Real-Time Bluetooth Data Transmission And AI-Powered Fever Detection",
-      make: "VitaCheck Health",
-      model: "INFRATEMP S3",
-      qty: 3,
-      targetPrice: "$15000.00"
-    },
-    {
-      srNo: 3,
-      productName: "Multi-Function Non-Contact Infrared Thermometer With AI-Powered Temperature Analysis, Bluetooth Connectivity, And Cloud-Enabled Health Monitoring System",
-      make: "NovaMed Instruments",
-      model: "INTELLITEMP HX900",
-      qty: 12,
-      targetPrice: "$45000.00"
+const ContactDirectory = ({ onClose, lead_id, customer_id }) => {
+  const [contactFetch, setContactFetch] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchCustomerContacts = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        "/showCustomerContactsDirectory",
+        {
+          params: {
+            lead_id: lead_id,
+            lead_cust_id: customer_id,
+          },
+        }
+      );
+
+      const sections = response.data.contacts || [];
+      const contacts = sections.map((section) => ({
+        id: section.id,
+        contact_person_name: section.contact_person_name,
+        city: section.city,
+        country: section.country,
+        mobile_no: section.mobile_no,
+        address: section.address,
+        pincode: section.pincode,
+        state: section.state,
+        email: section.email,
+        designation: section.designation,
+      }));
+
+      setContactFetch(contacts);
+      setLoading(false);
+      return contacts;
+    } catch (error) {
+      setLoading(false);
+      throw new Error(
+        "Error fetching customer contacts: " + error.message
+      );
     }
-  ];
+  };
+
+  useEffect(() => {
+    if (lead_id && customer_id) {
+      fetchCustomerContacts();
+    }
+  }, [lead_id, customer_id]);
+
   return (
     <div className="container-fluid p-0">
       <style jsx>{`
@@ -47,7 +69,7 @@ const ContactDirectory  = ({ onClose }) => {
           letter-spacing: 0.5px;
           text-align: center;
         }
-        .table th.product-name-header {
+        .table th.contact-name-header {
           text-align: left;
           padding-left: 36px;
         }
@@ -58,14 +80,14 @@ const ContactDirectory  = ({ onClose }) => {
           border-bottom: 1px solid #dee2e6;
           text-align: center;
         }
-        .table td.product-name-cell {
+        .table td.contact-name-cell {
           text-align: left;
           padding-left: 36px;
           font-weight: 700;
           word-break: break-word;
           white-space: normal;
         }
-        .make-cell, .model-cell {
+        .designation-cell, .city-cell {
           font-weight: 600;
         }
         .fw-bold {
@@ -98,37 +120,67 @@ const ContactDirectory  = ({ onClose }) => {
           padding: 0;
           margin: 0;
         }
+        .loading-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 50px;
+          color: #2E467A;
+          font-size: 16px;
+        }
+        .no-data-container {
+          text-align: center;
+          padding: 50px;
+          color: #666;
+          font-size: 16px;
+        }
       `}</style>
       <div className="table-responsive">
         <table className="table table-hover mb-0">
           <thead className="gradient-header text-white">
             <tr>
               <th style={{ width: '70px', whiteSpace: 'nowrap' }}>SR.NO</th>
-              <th className="product-name-header" style={{ width: '35%', whiteSpace: 'nowrap' }}>PRODUCT NAME</th>
-              <th style={{ width: '20%', whiteSpace: 'nowrap' }}>MAKE</th>
-              <th style={{ width: '15%', whiteSpace: 'nowrap' }}>MODEL</th>
-              <th style={{ width: '70px', whiteSpace: 'nowrap' }}>QTY</th>
-              <th style={{ width: '120px', whiteSpace: 'nowrap' }}>TARGET PRICE</th>
+              <th className="contact-name-header" style={{ width: '25%', whiteSpace: 'nowrap' }}>CONTACT PERSON</th>
+              <th style={{ width: '15%', whiteSpace: 'nowrap' }}>DESIGNATION</th>
+              <th style={{ width: '12%', whiteSpace: 'nowrap' }}>CITY</th>
+              <th style={{ width: '12%', whiteSpace: 'nowrap' }}>MOBILE NO</th>
+              <th style={{ width: '15%', whiteSpace: 'nowrap' }}>EMAIL</th>
+              <th style={{ width: '12%', whiteSpace: 'nowrap' }}>PINCODE</th>
               <th className="actions-header" style={{ width: '90px' }}>ACTIONS</th>
             </tr>
           </thead>
           <tbody>
-            {tableData.map((item, index) => (
-              <tr key={index} className="table-body-text">
-                <td className="text-center fw-bold">{item.srNo}</td>
-                <td className="product-name-cell">{item.productName}</td>
-                <td className="make-cell">{item.make}</td>
-                <td className="model-cell">{item.model}</td>
-                <td className="text-center fw-bold">{item.qty}</td>
-                <td className="fw-bold" style={{ textAlign: 'center' }}>{item.targetPrice}</td>
-                <td className="text-center">
-                  <span className="action-btn-group">
-                      <img src={edit} alt="Edit" style={{ width: '16px', height: '16px' }} />
-                      <img src={deleteIcon} alt="Delete" style={{ width: '16px', height: '16px' }} />
-                  </span>
+            {loading ? (
+              <tr>
+                <td colSpan="8" className="loading-container">
+                  Loading contacts...
                 </td>
               </tr>
-            ))}
+            ) : contactFetch.length === 0 ? (
+              <tr>
+                <td colSpan="8" className="no-data-container">
+                  No contacts found
+                </td>
+              </tr>
+            ) : (
+              contactFetch.map((contact, index) => (
+                <tr key={contact.id} className="table-body-text">
+                  <td className="text-center fw-bold">{index + 1}</td>
+                  <td className="contact-name-cell">{contact.contact_person_name || '-'}</td>
+                  <td className="designation-cell">{contact.designation || '-'}</td>
+                  <td className="city-cell">{contact.city || '-'}</td>
+                  <td className="text-center fw-bold">{contact.mobile_no || '-'}</td>
+                  <td style={{ textAlign: 'center' }}>{contact.email || '-'}</td>
+                  <td className="text-center fw-bold">{contact.pincode || '-'}</td>
+                  <td className="text-center">
+                    <span className="action-btn-group">
+                      <img src={edit} alt="Edit" style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                      <img src={deleteIcon} alt="Delete" style={{ width: '16px', height: '16px', cursor: 'pointer' }} />
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -136,4 +188,4 @@ const ContactDirectory  = ({ onClose }) => {
   );
 };
 
-  export default ContactDirectory;
+export default ContactDirectory;

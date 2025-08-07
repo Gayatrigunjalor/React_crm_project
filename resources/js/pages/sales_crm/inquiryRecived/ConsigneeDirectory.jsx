@@ -21,23 +21,17 @@ const ConsigneeDirectory = ({ onClose, lead_id, customer_id }) => {
 
       const consigneeSection = response.data.consignee || [];
       const mappedConsignees = consigneeSection.map((section, index) => ({
-        srNo: index + 1, // numbering dynamically
-        productName: section.productName || 'N/A', // if applicable, else remove these fields
-        make: section.make || 'N/A',
-        model: section.model || 'N/A',
-        qty: section.qty || 0,
-        targetPrice: section.targetPrice || '$0.00',
-        // add any other fields you want to display
+        srNo: index + 1,
         id: section.id,
-        consignee_address: section.add,
-        consignee_city: section.city,
-        contact_person_name: section.contact_person_name,
-        consignee_country: section.country,
-        consignee_designation: section.designation,
-        consignee_email: section.email,
-        consignee_mobile_number: section.mo_no,
-        consignee_pincode: section.pincode,
-        consignee_state: section.state,
+        contact_person_name: section.contact_person_name || 'N/A',
+        address: section.add || 'N/A',
+        city: section.city || 'N/A',
+        pincode: section.pincode || 'N/A',
+        state: section.state || 'N/A',
+        country: section.country || 'N/A',
+        mobile_number: section.mo_no || 'N/A',
+        email: section.email || 'N/A',
+        designation: section.designation || 'N/A',
       }));
 
       setConsignees(mappedConsignees);
@@ -55,7 +49,7 @@ const ConsigneeDirectory = ({ onClose, lead_id, customer_id }) => {
   return (
     <div className="container-fluid p-0">
       <style jsx>{`
-        /* Styles remain unchanged */
+        /* Styles for the updated table */
         .gradient-header {
           background: linear-gradient(90deg, #111A2E 0%, #375494 100%);
         }
@@ -66,30 +60,27 @@ const ConsigneeDirectory = ({ onClose, lead_id, customer_id }) => {
           border: none;
           color: #fff;
           font-weight: 700;
-          font-size: 18px;
+          font-size: 14px;
           padding: 18px 10px;
           letter-spacing: 0.5px;
           text-align: center;
+          white-space: nowrap;
         }
-        .table th.product-name-header {
+        .table th.left-align {
           text-align: left;
-          padding-left: 36px;
+          padding-left: 20px;
         }
         .table td {
           border: none;
           padding: 18px 10px;
-          font-size: 15px;
+          font-size: 14px;
           border-bottom: 1px solid #dee2e6;
           text-align: center;
-        }
-        .table td.product-name-cell {
-          text-align: left;
-          padding-left: 36px;
-          font-weight: 700;
           word-break: break-word;
-          white-space: normal;
         }
-        .make-cell, .model-cell {
+        .table td.left-align {
+          text-align: left;
+          padding-left: 20px;
           font-weight: 600;
         }
         .fw-bold {
@@ -97,14 +88,21 @@ const ConsigneeDirectory = ({ onClose, lead_id, customer_id }) => {
         }
         .table-body-text {
           color: #2E467A;
-          font-size: 16px;
-          font-weight: 700;
+          font-size: 14px;
+          font-weight: 600;
         }
         .action-btn-group {
           display: flex;
-          gap: 6px;
+          gap: 8px;
           justify-content: center;
           align-items: center;
+        }
+        .action-btn-group img {
+          cursor: pointer;
+          transition: opacity 0.2s;
+        }
+        .action-btn-group img:hover {
+          opacity: 0.7;
         }
         .actions-header {
           white-space: nowrap;
@@ -126,6 +124,12 @@ const ConsigneeDirectory = ({ onClose, lead_id, customer_id }) => {
           margin: 20px 0;
           font-weight: 600;
         }
+        .error-text {
+          color: #dc3545;
+        }
+        .loading-text {
+          color: #6c757d;
+        }
       `}</style>
 
       <div className="table-responsive">
@@ -136,19 +140,22 @@ const ConsigneeDirectory = ({ onClose, lead_id, customer_id }) => {
           <table className="table table-hover mb-0">
             <thead className="gradient-header text-white">
               <tr>
-                <th style={{ width: '70px', whiteSpace: 'nowrap' }}>SR.NO</th>
-                <th className="product-name-header" style={{ width: '35%', whiteSpace: 'nowrap' }}>PRODUCT NAME</th>
-                <th style={{ width: '20%', whiteSpace: 'nowrap' }}>MAKE</th>
-                <th style={{ width: '15%', whiteSpace: 'nowrap' }}>MODEL</th>
-                <th style={{ width: '70px', whiteSpace: 'nowrap' }}>QTY</th>
-                <th style={{ width: '120px', whiteSpace: 'nowrap' }}>TARGET PRICE</th>
-                <th className="actions-header" style={{ width: '90px' }}>ACTIONS</th>
+                <th style={{ width: '60px' }}>SR.NO</th>
+                <th className="left-align" style={{ width: '15%' }}>CONTACT PERSON</th>
+                <th style={{ width: '12%' }}>DESIGNATION</th>
+                <th className="left-align" style={{ width: '20%' }}>ADDRESS</th>
+                <th style={{ width: '10%' }}>CITY</th>
+                <th style={{ width: '8%' }}>PINCODE</th>
+                <th style={{ width: '10%' }}>STATE</th>
+                <th style={{ width: '12%' }}>MOBILE</th>
+                <th style={{ width: '15%' }}>EMAIL</th>
+                <th className="actions-header" style={{ width: '80px' }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
               {consignees.length === 0 && (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', fontWeight: '600' }}>
+                  <td colSpan="10" style={{ textAlign: 'center', fontWeight: '600', padding: '40px' }}>
                     No Consignees Found
                   </td>
                 </tr>
@@ -156,15 +163,28 @@ const ConsigneeDirectory = ({ onClose, lead_id, customer_id }) => {
               {consignees.map((item, index) => (
                 <tr key={item.id || index} className="table-body-text">
                   <td className="text-center fw-bold">{item.srNo}</td>
-                  <td className="product-name-cell">{item.productName}</td>
-                  <td className="make-cell">{item.make}</td>
-                  <td className="model-cell">{item.model}</td>
-                  <td className="text-center fw-bold">{item.qty}</td>
-                  <td className="fw-bold" style={{ textAlign: 'center' }}>{item.targetPrice}</td>
+                  <td className="left-align">{item.contact_person_name}</td>
+                  <td className="text-center">{item.designation}</td>
+                  <td className="left-align">{item.address}</td>
+                  <td className="text-center">{item.city}</td>
+                  <td className="text-center">{item.pincode}</td>
+                  <td className="text-center">{item.state}</td>
+                  <td className="text-center">{item.mobile_number}</td>
+                  <td className="text-center" style={{ fontSize: '13px' }}>{item.email}</td>
                   <td className="text-center">
                     <span className="action-btn-group">
-                      <img src={edit} alt="Edit" style={{ width: '16px', height: '16px' }} />
-                      <img src={deleteIcon} alt="Delete" style={{ width: '16px', height: '16px' }} />
+                      <img 
+                        src={edit} 
+                        alt="Edit" 
+                        style={{ width: '16px', height: '16px' }}
+                        onClick={() => console.log('Edit consignee:', item.id)}
+                      />
+                      <img 
+                        src={deleteIcon} 
+                        alt="Delete" 
+                        style={{ width: '16px', height: '16px' }}
+                        onClick={() => console.log('Delete consignee:', item.id)}
+                      />
                     </span>
                   </td>
                 </tr>

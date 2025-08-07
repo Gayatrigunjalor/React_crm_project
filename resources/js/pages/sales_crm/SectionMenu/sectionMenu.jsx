@@ -257,7 +257,7 @@ width: 900px;
             {showContactPerson && (
                 <div className="modal-backdrop">
                     <div className="modal-content">
-                        <Contactperson onClose={() => setShowContactPerson(false)} />
+                        <Contactperson onClose={() => setShowContactPerson(false)} lead_id={lead_id} customer_id={customer_id} />
                     </div>
                 </div>
             )}
@@ -265,7 +265,7 @@ width: 900px;
             {showConsigneeDetails && (
                 <div className="modal-backdrop">
                     <div className="modal-content">
-                        <ConsigneeDetails onClose={() => setShowConsigneeDetails(false)} />
+                        <ConsigneeDetails onClose={() => setShowConsigneeDetails(false)} lead_id={lead_id} customer_id={customer_id}/>
                     </div>
                 </div>
             )}
@@ -277,7 +277,7 @@ width: 900px;
                             <h4>Contact Directory</h4>
                             <button className="modal-close-btn" onClick={() => setShowContactDirectory(false)}>×</button>
                         </div>
-                        <ContactDirectory onClose={() => setShowContactDirectory(false)} />
+                        <ContactDirectory onClose={() => setShowContactDirectory(false)} lead_id={lead_id} customer_id={customer_id}/>
                     </div>
                 </div>
             )}
@@ -286,7 +286,7 @@ width: 900px;
                 <div className="modal-backdrop">
                     <div className="modal-content directory-modal">
                         <div className="modal-header">
-                            <h4>Contact Directory</h4>
+                            <h4>Consignee Directory</h4>
                             <button className="modal-close-btn" onClick={() => setShowConsigneeDirectory(false)}>×</button>
                         </div>
                         <ConsigneeDirectory onClose={() => setShowConsigneeDirectory(false)} lead_id={lead_id} customer_id={customer_id} />

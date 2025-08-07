@@ -1,8 +1,105 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Form, Button } from "react-bootstrap";
 import EditIcon from "../../../assets/img/newIcons/edit.svg";
+import axiosInstance from "../../../axios";
 
-const ConsigneeDetails = ({ onClose }) => {
+const ConsigneeDetails = ({ 
+    onClose, 
+    lead_id, 
+    customer_id, 
+    toast, 
+    fetchConsigneesData, 
+    setConsigneeSection, 
+    setIsEdit 
+}) => {
+    // Form state
+    const [consignee_form_Data, setConsignee_form_Data] = useState({
+        contact_person_name: "",
+        consignee_address: "",
+        consignee_city: "",
+        consignee_pincode: "",
+        consignee_country: "",
+        consignee_state: "",
+        consignee_mobile_number: "",
+        consignee_email: "",
+        consignees_designation: "",
+    });
+
+    const [sameAsContactPerson, setSameAsContactPerson] = useState(false);
+
+    // Handle input changes
+    const handleInputChange = (field, value) => {
+        setConsignee_form_Data(prevData => ({
+            ...prevData,
+            [field]: value
+        }));
+    };
+
+    // Handle checkbox change
+    const handleCheckboxChange = (checked) => {
+        setSameAsContactPerson(checked);
+        // You can implement logic here to populate form with contact person details
+        // if you have access to contact person data
+    };
+
+    const handleConsigneeSave = async () => {
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(consignee_form_Data.consignee_email)) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+
+        // Validate other required fields
+        if (!consignee_form_Data.contact_person_name || 
+            !consignee_form_Data.consignee_address || 
+            !consignee_form_Data.consignee_city || 
+            !consignee_form_Data.consignee_pincode || 
+            !consignee_form_Data.consignee_country || 
+            !consignee_form_Data.consignee_state || 
+            !consignee_form_Data.consignee_mobile_number) {
+            toast.error("Please fill in all required fields.");
+            return;
+        }
+
+        const consignees = {
+            add: consignee_form_Data.consignee_address,
+            city: consignee_form_Data.consignee_city,
+            contact_person_name: consignee_form_Data.contact_person_name,
+            country: consignee_form_Data.consignee_country,
+            designation: consignee_form_Data.consignees_designation,
+            email: consignee_form_Data.consignee_email,
+            mo_no: consignee_form_Data.consignee_mobile_number,
+            pincode: consignee_form_Data.consignee_pincode,
+            state: consignee_form_Data.consignee_state,
+        };
+
+        const requestData = {
+            lead_id,
+            cust_id: customer_id,
+            consignees: [consignees],
+        };
+
+        try {
+            const response = await axiosInstance.post(
+                "/storeCustomerConsignees",
+                requestData
+            );
+
+            if (response) {
+                toast.success("Customer Consignees Added Successfully");
+                fetchConsigneesData();
+                setConsigneeSection((prevSections) => [
+                    ...prevSections,
+                    consignee_form_Data,
+                ]);
+            }
+            setIsEdit(false);
+        } catch (error) {
+            toast.error("Error saving consignee details");
+        }
+    };
+
     return (
         <>
             <style>{`
@@ -135,16 +232,25 @@ const ConsigneeDetails = ({ onClose }) => {
                 <div className="form-heading">Consignee Details</div>
 
                 <div className="checkbox-container">
-                    <Form.Check type="checkbox" />
+                    <Form.Check 
+                        type="checkbox" 
+                        checked={sameAsContactPerson}
+                        onChange={(e) => handleCheckboxChange(e.target.checked)}
+                    />
                     <label className="checkbox-label">Same As Contact Person </label>
                 </div>
 
                 <Row>
                     <Col md={6}>
                         <div className="compact-field">
-                            <label className="compact-label"> Name:</label>
+                            <label className="compact-label">Name:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.contact_person_name}
+                                    onChange={(e) => handleInputChange('contact_person_name', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
@@ -153,7 +259,12 @@ const ConsigneeDetails = ({ onClose }) => {
                         <div className="compact-field">
                             <label className="compact-label">Country:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignee_country}
+                                    onChange={(e) => handleInputChange('consignee_country', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
@@ -163,9 +274,14 @@ const ConsigneeDetails = ({ onClose }) => {
                 <Row>
                     <Col md={6}>
                         <div className="compact-field">
-                            <label className="compact-label">Contact Person:</label>
+                            <label className="compact-label">Email:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="number" className="input-field" />
+                                <Form.Control 
+                                    type="email" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignee_email}
+                                    onChange={(e) => handleInputChange('consignee_email', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
@@ -174,12 +290,16 @@ const ConsigneeDetails = ({ onClose }) => {
                         <div className="compact-field">
                             <label className="compact-label">State:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignee_state}
+                                    onChange={(e) => handleInputChange('consignee_state', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
                     </Col>
-
                 </Row>
 
                 <Row>
@@ -187,27 +307,12 @@ const ConsigneeDetails = ({ onClose }) => {
                         <div className="compact-field">
                             <label className="compact-label">Address:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
-                                <img src={EditIcon} alt="Edit" className="form-icon" />
-                            </div>
-                        </div>
-                    </Col>
-                    <Col md={6}>
-                        <div className="compact-field">
-                            <label className="compact-label">State:</label>
-                            <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
-                                <img src={EditIcon} alt="Edit" className="form-icon" />
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md={6}>
-                        <div className="compact-field">
-                            <label className="compact-label">Mobile:</label>
-                            <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignee_address}
+                                    onChange={(e) => handleInputChange('consignee_address', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
@@ -216,35 +321,69 @@ const ConsigneeDetails = ({ onClose }) => {
                         <div className="compact-field">
                             <label className="compact-label">City:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignee_city}
+                                    onChange={(e) => handleInputChange('consignee_city', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
                     </Col>
                 </Row>
+
                 <Row>
                     <Col md={6}>
                         <div className="compact-field">
-                            <label className="compact-label">Address:</label>
+                            <label className="compact-label">Mobile:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignee_mobile_number}
+                                    onChange={(e) => handleInputChange('consignee_mobile_number', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
                     </Col>
                     <Col md={6}>
                         <div className="compact-field">
-                            <label className="compact-label">State:</label>
+                            <label className="compact-label">Pincode:</label>
                             <div className="input-wrapper">
-                                <Form.Control type="text" className="input-field" />
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignee_pincode}
+                                    onChange={(e) => handleInputChange('consignee_pincode', e.target.value)}
+                                />
                                 <img src={EditIcon} alt="Edit" className="form-icon" />
                             </div>
                         </div>
                     </Col>
                 </Row>
+
+                <Row>
+                    <Col md={6}>
+                        <div className="compact-field">
+                            <label className="compact-label">Designation:</label>
+                            <div className="input-wrapper">
+                                <Form.Control 
+                                    type="text" 
+                                    className="input-field"
+                                    value={consignee_form_Data.consignees_designation}
+                                    onChange={(e) => handleInputChange('consignees_designation', e.target.value)}
+                                />
+                                <img src={EditIcon} alt="Edit" className="form-icon" />
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+
                 <div className="action-buttons">
                     <Button className="btn-cancel" onClick={onClose}>Cancel</Button>
-                    <Button className="btn-save">Save</Button>
+                    <Button className="btn-save" onClick={handleConsigneeSave}>Save</Button>
                 </div>
             </div>
         </>
