@@ -1466,6 +1466,7 @@ const MainSection = () => {
                     query_product_name={productData.query_product_name}
                     sender_name={productData.sender_name}
                     customer_id={productData.customer_id}
+                    lead_id={leadId}
                 />
 
 

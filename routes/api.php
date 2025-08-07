@@ -107,6 +107,7 @@ use App\Http\Controllers\InternationalTreadingController;
 use App\Http\Controllers\VendorPurchaseInvoiceController;
 use App\Http\Controllers\InternationalTreadingPdfController;
 use App\Http\Controllers\TwoFactorAuthController;
+use App\Http\Controllers\LeadPageIndexController;
 
 Route::post('/two-factor-challenge-submit', [TwoFactorAuthController::class, 'store'])->middleware(['web','throttle:login'])
     ->name('two-factor-fortify.login');
@@ -1106,3 +1107,8 @@ Route::get('/getCnsSourcingDataFromSales', [DashboardController::class, 'getCnsS
 Route::get('/getTATDataFromSales', [DashboardController::class, 'getTATDataFromSales']);
 Route::get('/getTargetCostDataFromSales', [DashboardController::class, 'getTargetCostDataFromSales']);
 Route::get('/getProductsAgainstOpportunityId', [DashboardController::class, 'getProductsAgainstOpportunityId']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/lead-page-index', [LeadPageIndexController::class, 'save']);
+    Route::get('/lead-page-index', [LeadPageIndexController::class, 'get']);
+});

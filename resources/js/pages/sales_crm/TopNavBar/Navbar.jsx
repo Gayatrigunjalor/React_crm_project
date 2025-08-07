@@ -7,7 +7,9 @@ import ChangeOwner from "../inquiryRecived/Changeowner";
 import Remark from "../inquiryRecived/Remark";
 import Productdirectory from "../inquiryRecived/Productdirectory";
 
-const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, query_product_name, sender_name, customer_id }) => {
+const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, query_product_name, sender_name, customer_id,lead_id }) => {
+  console.log("customer_id", customer_id,lead_id);
+
   const [isCollapsed, setIsCollapsed] = useState(false);
   useEffect(() => {
     if (unique_query_id) {
@@ -249,7 +251,7 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
               </div>
 
               <div className="flex-grow-1 p-2 h-100 overflow-auto  w-100" >
-                <SectionMenu onStageSelect={onStageSelect} selectedStageIndex={currentIndex} />
+                <SectionMenu onStageSelect={onStageSelect} selectedStageIndex={currentIndex} lead_id={lead_id} customer_id={customer_id}/>
               </div>
 
             </div>
@@ -410,7 +412,7 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
             }}
           >
             <div style={{ background: "#fff", borderRadius: "20px", padding: "20px", position: "relative" }}>
-              <AddproductFrom onClose={() => setShowAddProductForm(false)} />
+              <AddproductFrom onClose={() => setShowAddProductForm(false)} lead_id={lead_id} customer_id={customer_id} />
             </div>
           </div>
         )}
@@ -514,7 +516,7 @@ const Navbar = ({ currentIndex, onStageSelect, unique_query_id, created_at, quer
                 &times;
               </button> */}
 
-              <Productdirectory onClose={() => setShowProductDirectory(false)} />
+              <Productdirectory onClose={() => setShowProductDirectory(false)} customer_id={customer_id} leadId={lead_id} /> 
             </div>
           </div>
         )}

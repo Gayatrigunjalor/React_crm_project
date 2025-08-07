@@ -1,37 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import edit from "../../../assets/img/newIcons/edit.svg";
 import deleteIcon from "../../../assets/img/newIcons/delete.svg";
+import axiosInstance from "../../../axios";
 
-const Productdirectory = ({ onClose }) => {
-  const tableData = [
-    {
-      srNo: 1,
-      productName: "Non-Contact Infrared Forehead Temperature Measuring Device",
-      make: "Thermo Fisher Scientific",
-      model: "MA02",
-      qty: 10,
-      targetPrice: "$75000.00"
-    },
-    {
-      srNo: 2,
-      productName: "Advanced Non-Contact Infrared Forehead Thermometer With Real-Time Bluetooth Data Transmission And AI-Powered Fever Detection",
-      make: "VitaCheck Health",
-      model: "INFRATEMP S3",
-      qty: 3,
-      targetPrice: "$15000.00"
-    },
-    {
-      srNo: 3,
-      productName: "Multi-Function Non-Contact Infrared Thermometer With AI-Powered Temperature Analysis, Bluetooth Connectivity, And Cloud-Enabled Health Monitoring System",
-      make: "NovaMed Instruments",
-      model: "INTELLITEMP HX900",
-      qty: 12,
-      targetPrice: "$45000.00"
+// Make sure you pass customer_id, leadId, onClose as props
+const Productdirectory = ({ onClose, customer_id, leadId }) => {
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch data from API when the popup opens or when ids change
+  useEffect(() => {
+    if (!customer_id || !leadId) {
+      setTableData([]);
+      return;
     }
-  ];
+    setLoading(true);
+    axiosInstance.get("/showProductsDirectory", {
+      params: { customer_id, lead_id: leadId }
+    })
+      .then(res => {
+        const products = (res.data && res.data.products) ? res.data.products : [];
+        // Format API data to match static table structure
+        const mapped = products.map((item, idx) => ({
+          srNo: idx + 1,
+          productName: item.product,
+          make: item.make,
+          model: item.model,
+          qty: item.quantity,
+          targetPrice: item.target_price
+        }));
+        setTableData(mapped);
+      })
+      .catch(() => setTableData([]))
+      .finally(() => setLoading(false));
+  }, [customer_id, leadId]);
+
   return (
     <div className="container-fluid p-0">
-      <style jsx>{`
+      <style>{`
         .gradient-header {
           background: linear-gradient(90deg, #111A2E 0%, #375494 100%);
         }
@@ -82,7 +88,6 @@ const Productdirectory = ({ onClose }) => {
           justify-content: center;
           align-items: center;
         }
-       
         .actions-header {
           white-space: nowrap;
           text-align: center;
@@ -98,22 +103,20 @@ const Productdirectory = ({ onClose }) => {
           padding: 0;
           margin: 0;
         } 
-          .close-btn {
-  background: none;
-  border: none;
+        .close-btn {
+          background: none;
+          border: none;
           color: #2E467A;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  line-height: 1;
-}
-
+          font-size: 20px;
+          font-weight: bold;
+          cursor: pointer;
+          line-height: 1;
+        }
       `}</style>
-      <div className="d-flex justify-content-between align-items-center  p-2">
-        <h5 className="mb-0" style={{ color: "#2E467A" }}>Product Directory</h5>
+      <div className="d-flex justify-content-between align-items-center p-2">
+        <h5 className="mb-0" style={{color:"#2E467A"}}>Product Directory</h5>
         <button className="close-btn" onClick={onClose}>&times;</button>
       </div>
-
       <div className="table-responsive">
         <table className="table table-hover mb-0">
           <thead className="gradient-header text-white">
@@ -128,7 +131,17 @@ const Productdirectory = ({ onClose }) => {
             </tr>
           </thead>
           <tbody>
-            {tableData.map((item, index) => (
+            {loading && (
+              <tr>
+                <td className="text-center" colSpan={7} style={{color: "#205"}}>Loading...</td>
+              </tr>
+            )}
+            {!loading && tableData.length === 0 && (
+              <tr>
+                <td className="text-center" colSpan={7} style={{color: "#bbb"}}>No products found.</td>
+              </tr>
+            )}
+            {!loading && tableData.map((item, index) => (
               <tr key={index} className="table-body-text">
                 <td className="text-center fw-bold">{item.srNo}</td>
                 <td className="product-name-cell">{item.productName}</td>

@@ -10,7 +10,7 @@ import ConsigneeDirectory from "../inquiryRecived/ConsigneeDirectory";
 import Complaintform from "../inquiryRecived/Complaintform";
 import FeedbackForm from "../inquiryRecived/FeedbackModal";
 
-const SectionMenu = ({ onStageSelect, selectedStageIndex, userStages = [] }) => {
+const SectionMenu = ({ onStageSelect, selectedStageIndex, userStages = [], lead_id, customer_id  }) => {
     const stages = userStages.length > 0 ? userStages : [
         "Inquiry Received",
         "Lead Acknowledgment",
@@ -289,7 +289,7 @@ width: 900px;
                             <h4>Contact Directory</h4>
                             <button className="modal-close-btn" onClick={() => setShowConsigneeDirectory(false)}>×</button>
                         </div>
-                        <ConsigneeDirectory onClose={() => setShowConsigneeDirectory(false)} />
+                        <ConsigneeDirectory onClose={() => setShowConsigneeDirectory(false)} lead_id={lead_id} customer_id={customer_id} />
                     </div>
                 </div>
             )}
