@@ -8,6 +8,7 @@ import swal from 'sweetalert';
 import main from '../../../assets/img/icons/doc_download.svg';
 import AddNewCustomerModal from "../../sales/customers/AddNewCustomerModal";
 import { useParams } from "react-router-dom";
+import Rightcard from "../inquiryRecived/Rightcard";
 
 const FifthMain = ({ onPiValidation }) => {
     const [tableData, setTableData] = useState([]);
@@ -295,167 +296,148 @@ const FifthMain = ({ onPiValidation }) => {
     return (
         <>
             <style>{placeholderStyle}</style>
-            <div className="p-1">
-                <div
-                    className="mb-1"
-                    style={{
-                        fontSize: "0.85rem",
-                        color: "#6c757d",
-                        textAlign: "left",
-                    }}
-                >
-                    <h5 style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Product List</h5>
-                </div>
-
-                {/* Form Section */}
-
-                <form className="d-grid gap-1">
-                    <div className="productdirectory p-1 rounded"
+            <div
+                className="card-main  d-flex justify-content-between"
+                style={{
+                    width: "1200px",
+                    maxWidth: "100%",
+                    padding: "12px 16px",
+                    fontFamily: "Nunito Sans",
+                    display: "flex",
+                    flexDirection: "row",
+                    marginLeft: "-28px",
+                    flexWrap: "nowrap",
+                    gap: "16px",
+                    position: "relative",
+                }}
+            >
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                    {/* First Card - Latest Quoted Prices */}
+                    <div
+                        className="card shadow-sm"
                         style={{
-                            width: "100%",
-                            overflowX: "auto",
-                            whiteSpace: "nowrap",
-                            padding: "5px",
-                            scrollbarWidth: 'thin',
-                        }}>
-                        <table className="table table-striped"
-                            style={{
-                                width: "100%",
-                                borderCollapse: "collapse",
-                                textAlign: "center",
-                                border: "1px solid #ccc",
-                                fontFamily: 'Nunito Sans, sans-serif'
-                            }}>
-                            <thead>
-                                <tr>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Sr No</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Product Name</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Make</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Model</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Quantity</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Target Price</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Quoted Price</th>
-                                    <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", border: "1px solid #ccc" }}>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loading ? (
-                                    <tr>
-                                        <td colSpan={4} className="text-center">
-                                            <Spinner animation="border" />{" "}
-                                            {/* Loader */}
-                                        </td>
-                                    </tr>
-                                ) : (
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                            borderRadius: "20px",
+                            padding: "1.5rem",
+                            fontSize: "14px",
+                        }}
+                    >
+                        <h5 style={{ fontFamily: "Nunito Sans, sans-serif", marginBottom: "1rem" }}>
+                            Latest Quoted Prices:
+                        </h5>
 
-                                    productData.map((data) => (
-                                        <tr key={data.id}>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{rowIndex++}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{data.product || "N/A"}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{data.make || "N/A"}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{data.model || "N/A"}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{data.quantity || "N/A"}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{data.target_price || "N/A"}</td>
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{data.quoted_price || "N/A"}{data.currency === "USD" ? "$" : data.currency}</td>
-
-                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{formatDate(data.created_at || "N/A")}</td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <br />
-                    <h5>Quotation Details</h5>
-                    <div>
-                        {/* <Button
-                            variant="subtle-primary"
-                            className="btnstyle"
-                            style={{
-                                backgroundColor: 'transparent',
-                                border: '1px solid #3874FF',
-                                // color: '#3874FF',
-                                fontFamily: 'Nunito Sans, sans-serif',
-                                fontSize: "0.9rem",
-                            }}
-                        >
-                            <a
-                                // href={`/sales/quotations/create`}
-                                 href={`/sales/quotations/create/0/${leadId}/${customer_id}/lead_customers`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btnstyle"
+                        <div style={{ overflowX: "auto" }}>
+                            <table
                                 style={{
-                                    textDecoration: 'none',
-                                    fontFamily: 'Nunito Sans, sans-serif',
+                                    width: "100%",
+                                    borderCollapse: "collapse",
+                                    fontFamily: "Nunito Sans, sans-serif",
+                                    textAlign: "center",
                                 }}
                             >
-                                Create Quotation
-                            </a>
-                        </Button> */}
-                        <Button
-                            variant="subtle-primary"
-                            className="btnstyle"
-                            onClick={handleCreateQuotation}
-                            style={{
-                                backgroundColor: 'transparent',
-                                border: '1px solid #3874FF',
-                                fontFamily: 'Nunito Sans, sans-serif',
-                                fontSize: "0.9rem",
-                            }}
-                        >
-                            Create Quotation
-                        </Button>
-
-
-                        <div className="form-group d-flex align-items-center gap-2 mt-1">
-                            <div className="d-flex align-items-center gap-2">  {/* Added this to ensure the inputs and icon align */}
-                                <div>
-                                    <label className="form-label">PI Number</label>
-                                    <input
-                                        type="text"
-                                        className="form-control small-input"
-                                        placeholder="PI Number"
-                                        value={piNumber}
-                                        onChange={handleDecisionMakerNameChange}
-                                        readOnly
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="form-label">Date</label>
-                                    <input
-                                        type="text"
-                                        className="form-control small-input"
-                                        placeholder="Date"
-                                        value={piDate}
-                                        onChange={handleDateChange}
-                                    />
-                                </div>
-
-                                {/* Align the icon inside the same flex container */}
-                                {piDate && piNumber && (
-                                    <img
-                                        className="mt-3"
-                                        src={main}
-                                        alt="phoenix"
-                                        width={32}
-                                        height={32}
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={() => handlePDFclicked(id, 'pdfWithSignatureQuotation')}
-                                    />
-                                )}
-
-                            </div>
+                                <thead>
+                                    <tr >
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold", borderTopLeftRadius: "20px", borderBottom: "1px solid #ddd"
+                                            }}
+                                        >Product Name</th>
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            }}
+                                        >Date</th>
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            }}                                        >Make</th>
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            }}                                         >Model</th>
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            }}                                         >Quantity</th>
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            }}                                        >Target Price</th>
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            }}
+                                        >Quoted Price</th>
+                                        <th
+                                            style={{
+                                                padding: "7px", fontFamily: 'Nunito Sans', fontWeight: '700', border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold", borderTopRightRadius: "20px", borderBottom: "1px solid #ddd"
+                                            }}     >Currency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {productData.map((data) => (
+                                        <tr key={data.id} style={{ borderBottom: "1px solid #ddd" }}>
+                                            <td style={{ padding: "8px" }}>{data.product || "N/A"}</td>
+                                            <td style={{ padding: "8px" }}>{formatDate(data.created_at || "N/A")}</td>
+                                            <td style={{ padding: "8px" }}>{data.make || "N/A"}</td>
+                                            <td style={{ padding: "8px" }}>{data.model || "N/A"}</td>
+                                            <td style={{ padding: "8px" }}>{data.quantity || "N/A"}</td>
+                                            <td style={{ padding: "8px" }}>{data.target_price || "N/A"}</td>
+                                            <td style={{ padding: "8px" }}>
+                                                {data.quoted_price || "N/A"}
+                                                {data.currency === "USD" ? " USD" : ` ${data.currency}`}
+                                            </td>
+                                            <td style={{ padding: "8px" }}>{data.currency || "N/A"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
-
                     </div>
-                </form>
-                <ToastContainer />
-                {showModal && (
-                    <AddNewCustomerModal onHide={handleClose} onSuccess={handleSuccess} leadId={leadId} customer_id={customerId} />
-                )}
+
+                    {/* Second Card - PI Details */}
+                    <div
+                        className="card shadow-sm"
+                        style={{
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                            borderRadius: "20px",
+                            padding: "1.5rem",
+                            fontSize: "14px",
+                        }}
+                    >
+                        <div style={{ marginBottom: "0.5rem" }}>
+                            <strong>PI Number:</strong> {piNumber}
+                        </div>
+                        <div style={{ marginBottom: "0.5rem" }}>
+                            <strong>PI Date:</strong> {piDate}
+                        </div>
+                        <p style={{ color: "#6c757d", fontSize: "0.85rem" }}>
+                            <strong>Note:</strong> Once you shared the quotation with the customer, you can move forward.
+                        </p>
+
+                        {/* <div className="d-flex justify-content-end gap-2">
+      <button className="btn btn-light">Previous</button>
+      <button className="btn btn-primary">Next</button>
+    </div> */}
+                    </div>
+                </div>
+
+                <div
+                    className="card shadow-sm"
+                    style={{
+                        flex: "0 0 485px",
+                        height: "500px", // fixed height to match left
+                        borderRadius: "20px",
+                        backgroundColor: "#fff",
+                        margin: "10px 0 10px 0px",
+                        padding: "30px",
+                        overflow: "hidden", // prevent scrollbars
+                    }}
+                >
+                    <Rightcard />
+                </div>
             </div>
         </>
 

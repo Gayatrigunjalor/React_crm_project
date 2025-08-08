@@ -22,6 +22,9 @@ import main from '../../../assets/img/icons/doc_download.svg';
 import { useAuth } from '../../../AuthContext';
 import Rightcard from "./Rightcard";
 import { useNavigate } from 'react-router-dom';
+import Seventhmain from "../VictoryStage/VictoryStage";
+import Sixthmain from "../DecisionAwaited/DecisionAwaited";
+
 
 import {
     DropdownButton,
@@ -1229,16 +1232,16 @@ const InquiredData = (props) => {
         </>
     );
 };
-
 const components = [
     { id: 1, component: (props) => <InquiredData {...props} />, name: "Inquired Data" },
     { id: 2, component: SecondMain, name: "Lead Acknowledgement" },
     { id: 3, component: ProductSourcing, name: "Product Sourcing" },
     { id: 4, component: PriceShared, name: "Price Shared" },
     { id: 5, component: FifthMain, name: "Quotation Sent" },
-    { id: 6, component: DecisionAwaited, name: "Follow Up" },
-    { id: 7, component: VictoryStage, name: "Victory Stage" },
+    { id: 6, component: Sixthmain, name: "Follow Up" },
+    { id: 7, component: Seventhmain, name: "Victory Stage" }
 ];
+
 
 const MainSection = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -1250,6 +1253,7 @@ const MainSection = () => {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [isPiDetailsValid, setIsPiDetailsValid] = useState(true);
     const [hasFollowUpDetails, setHasFollowUpDetails] = useState(false);
+    const [hasVictoryStageDetails, setHasVictoryStageDetails] = useState(false);
     const [hasPriceSharedData, setHasPriceSharedData] = useState(false);
     const [hasProductSourcingData, setHasProductSourcingData] = useState(false);
     const [formCompletionStatus, setFormCompletionStatus] = useState({
@@ -1262,6 +1266,12 @@ const MainSection = () => {
     const [hasLeadAcknowledgment, setHasLeadAcknowledgment] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const { userPermission } = useAuth();
+    const [formData, setFormData] = useState({
+        buying_plan: "",
+        name: "",
+        mo_no: "",
+        email: "",
+    });
 
     // Fetch lead details on component mount
     useEffect(() => {
@@ -1331,7 +1341,6 @@ const MainSection = () => {
         setHasProductSourcingData(isValid);
     };
 
-    // Modify isStageValid to include price shared validation
     const isStageValid = () => {
         switch (currentIndex) {
             case 0: // Inquired Data
@@ -1341,18 +1350,15 @@ const MainSection = () => {
             case 2: // Product Sourcing
                 return hasProductSourcingData;
             case 3: // Price Shared
-                return hasPriceSharedData;
-            case 4: // Quotation Send
                 return isPiDetailsValid;
-            case 5: // Follow Up
-                return hasFollowUpDetails;
-            default:
-                return true; // Other stages don't need validation
+            case 4: // Quotation Send
+                return formData.buying_plan && formData.name && formData.mo_no && formData.email;
+            case 5: return hasFollowUpDetails;  // Validation for Follow Up (SixthMain)
+            case 6: return hasVictoryStageDetails;  // Validation for Victory Stage (SeventhMain)
+            default: return true;
         }
     };
 
-
-    // Modify handleStageSelect to include price shared validation message
     const handleStageSelect = (index) => {
         // Only check validation when moving forward
         if (index > currentIndex) {
@@ -1363,12 +1369,7 @@ const MainSection = () => {
                         toast.error("Please complete all required fields");
                         break;
                     case 1:
-                        // Check if there are any entries at all
-                        if (!hasLeadAcknowledgment) {
-                            toast.error("Please complete lead acknowledgment first");
-                        } else {
-                            toast.error("Cannot proceed: Lead has been disqualified or marked as clarity pending");
-                        }
+                        toast.error("Please complete lead acknowledgment first");
                         break;
                     case 2:
                         toast.error("Please do Sourcing");
@@ -1381,6 +1382,14 @@ const MainSection = () => {
                         break;
                     case 5:
                         toast.error("Please complete follow-up details");
+                        break;
+                    case 6:
+                        toast.error("Please complete Victory Stage details");
+                        break;
+                    case 7:
+                        toast.error("Please complete Final Stage details");
+                        break;
+                    default:
                         break;
                 }
                 return;
@@ -1455,6 +1464,12 @@ const MainSection = () => {
     const handleFollowUpDetailsChange = (hasDetails) => {
         setHasFollowUpDetails(hasDetails);
     };
+
+    const handleVictoryStageDetailsChange = (hasDetails) => {
+        setHasVictoryStageDetails(hasDetails);
+    };
+
+
     return (
         <OpportunityProvider>
             <div className="d-flex flex-column dark:bg-gray-800" style={{ margin: "0px -16px" }}>
@@ -1490,16 +1505,13 @@ const MainSection = () => {
                                 {currentIndex === 4 ? (
                                     <FifthMain onPiValidation={handlePiValidation} />
                                 ) : currentIndex === 5 ? (
-                                    <DecisionAwaited onFollowUpDetailsChange={handleFollowUpDetailsChange} />
-                                ) : currentIndex === 1 ? (
-                                    <SecondMain onValidationChange={handleLeadAcknowledgmentValidation} />
-                                ) : currentIndex === 3 ? (
-                                    <PriceShared onPriceSharedValidation={handlePriceSharedValidation} />
-                                ) : currentIndex === 2 ? (
-                                    <ThirdMain onProductSourcingValidation={handleProductSourcingValidation} />
+                                    <Sixthmain onFollowUpDetailsChange={handleFollowUpDetailsChange} />
+                                ) : currentIndex === 6 ? (
+                                    <Seventhmain onVictoryStageDetailsChange={handleVictoryStageDetailsChange} />
                                 ) : (
                                     <CurrentComponent
                                         productData={productData}
+                                        formData={formData}
                                         onFormCompletionUpdate={handleFormCompletionUpdate}
                                         onNextStage={() => handleStageSelect(currentIndex + 1)}
                                         onPrevStage={() => handleStageSelect(currentIndex - 1)}
@@ -1509,11 +1521,12 @@ const MainSection = () => {
                                         {...(currentIndex === 3 && { onPriceSharedValidation: handlePriceSharedValidation })}
                                         {...(currentIndex === 2 && { onProductSourcingValidation: handleProductSourcingValidation })}
                                     />
+
                                 )}
                             </div>
                         )}
 
-                        <div className="d-flex justify-content-between mt-2 mb-2">
+                          <div className="d-flex justify-content-between mt-2 mb-2">
                             <button
                                 className="setFont p-1 btn"
                                 onClick={() => handleStageSelect(currentIndex - 1)}
@@ -1521,12 +1534,15 @@ const MainSection = () => {
                                 style={{
                                     width: "9rem",
                                     height: "2rem",
-                                    fontSize: "1rem",
-                                    backgroundColor: "#0292E3",
-                                    color: 'white'
+                                    fontSize: "14px",
+                                    background: "linear-gradient(#797C8433,#D6DCEAAD)",
+                                    color: '#2E467A',
+                                    fontWeight: "700",
+                                    fontFamily: "Nunito Sans",
+                                    borderStyle: "none"
                                 }}
                             >
-                                Prev
+                                Previous
                             </button>
                             {currentIndex < components.length - 1 && (
                                 <button
@@ -1535,9 +1551,12 @@ const MainSection = () => {
                                     style={{
                                         width: "9rem",
                                         height: "2rem",
-                                        fontSize: "1rem",
-                                        backgroundColor: "#0292E3",
-                                        color: 'white'
+                                        fontSize: "14px",
+                                        background: "linear-gradient(#111A2E, #375494)",
+                                        color: 'white',
+                                        fontWeight: "700",
+                                        fontFamily: "Nunito Sans",
+                                        borderStyle: "none"
                                     }}
                                     disabled={!isStageValid()} // <-- Disable if not valid
                                 >
@@ -1545,6 +1564,7 @@ const MainSection = () => {
                                 </button>
                             )}
                         </div>
+
                     </div>
 
                     {isSidebarOpen2 && (

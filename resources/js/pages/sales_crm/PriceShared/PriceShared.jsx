@@ -428,138 +428,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                                 )}
 
                                 {activeTab === 'pricedShared' && (
-                                    <div>
-                                        <table className="table table-striped"
-                                            style={{
-                                                width: "100%",
-                                                borderCollapse: "collapse",
-                                                textAlign: "center",
-                                                border: "1px solid #ccc",
-                                                borderStyle: "none",
-                                                fontFamily: 'Nunito Sans'
-                                            }}>
-                                            <thead >
-                                                <tr>
-                                                    {/* <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)",color: "#fff", fontWeight: "bold"
-                                        }}>Sr No</th> */}
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Product Name</th>
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Make</th>
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Model</th>
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Quality</th>
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Target Price</th>
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Quoted Price</th>
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Currency</th>
-                                                    {/* <th>Symbol</th> */}
-                                                    <th style={{
-                                                        fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
-                                                    }}>Submit</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {loading ? (
-                                                    <tr>
-                                                        <td colSpan={4} className="text-center" style={{ border: "1px solid #ccc" }}>
-                                                            <Spinner animation="border" /> {/* Loader */}
-                                                        </td>
-                                                    </tr>
-                                                ) : (
-                                                    editedProductData.map((item, index) => (
-                                                        <tr key={index}>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{index + 1}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.product || "N/A"}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.make || "N/A"}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.model || "N/A"}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.quantity || "N/A"}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>{item.target_price || "N/A"}</td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
-                                                                {editIndex === index ? (
-                                                                    <input
-                                                                        type="text"
-                                                                        className="form-control"
-                                                                        value={updatedPrice}
-                                                                        // placeholder={priceSharedData[index]?.quoted_price || "N/A"}
-                                                                        placeholder="Enter Quoted Price"
-                                                                        onChange={handlePriceChange}
-                                                                        style={{ width: '110px' }}
-                                                                        required
-                                                                    />
-                                                                ) : (
-                                                                    <span style={{ width: '110px' }}>
-                                                                        {item.quoted_price ? `${selectedCurrency[index]?.symbol || ""} ${item.quoted_price}` : "Click Edit to add quoted price"}
-                                                                    </span>
-                                                                )}
-                                                            </td>
-                                                            <td style={{ fontFamily: 'Nunito Sans, sans-serif', padding: "8px", border: "1px solid #ccc" }}>
-
-                                                                {editIndex === index ? (
-                                                                    <Form.Select
-                                                                        style={{ width: '200px' }}
-                                                                        value={selectedCurrency[index]?.name || ""}
-                                                                        onChange={(e) => handleCurrencyChange(index, e.target.value)}
-                                                                        required
-                                                                    >
-                                                                        <option value="">Select Currency</option>
-                                                                        {currencyTableData.map((currency, idx) => (
-                                                                            <option key={currency.id} value={currency.name}>
-                                                                                {currency.name} - {currency.symbol}
-                                                                            </option>
-                                                                        ))}
-                                                                    </Form.Select>
-
-
-                                                                ) : (
-                                                                    <span style={{ width: '110px', fontFamily: 'Nunito Sans, sans-serif' }}>
-                                                                        {"Click Edit to add currency"}
-                                                                    </span>
-                                                                )}
-
-
-                                                            </td>
-                                                            <td>
-                                                                {editIndex === index ? (
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn btn-success"
-                                                                        onClick={handleUpdateClick}
-                                                                        style={{ backgroundColor: '#0097EB', fontFamily: 'Nunito Sans, sans-serif' }}
-                                                                    >
-                                                                        Update
-                                                                    </button>
-                                                                ) : (
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn btn-primary"
-                                                                        onClick={() =>
-                                                                            handleEditClick(index)
-                                                                        }
-                                                                        style={{ backgroundColor: '#25B003', fontFamily: 'Nunito Sans, sans-serif' }}
-                                                                    >
-                                                                        Edit
-                                                                    </button>
-                                                                )}
-                                                            </td>
-
-                                                        </tr>
-                                                    ))
-                                                )}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <div></div>
                                 )}
                             </div>
                             <table className="table table-striped"
@@ -577,29 +446,29 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                                             fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)",color: "#fff", fontWeight: "bold"
                                         }}>Sr No</th> */}
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold",borderTopLeftRadius: "20px"
                                         }}>Product Name</th>
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
                                         }}>Make</th>
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
                                         }}>Model</th>
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
                                         }}>Quality</th>
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
                                         }}>Target Price</th>
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
                                         }}>Quoted Price</th>
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
                                         }}>Currency</th>
                                         {/* <th>Symbol</th> */}
                                         <th style={{
-                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "10px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold"
+                                            fontFamily: 'Nunito Sans', fontWeight: '700', padding: "6px", border: "1px solid #ccc", borderStyle: "none", background: "linear-gradient(#111A2E, #375494)", color: "#fff", fontWeight: "bold",borderTopRightRadius: "20px"
                                         }}>Submit</th>
                                     </tr>
                                 </thead>
@@ -625,7 +494,6 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                                                             type="text"
                                                             className="form-control"
                                                             value={updatedPrice}
-                                                            // placeholder={priceSharedData[index]?.quoted_price || "N/A"}
                                                             placeholder="Enter Quoted Price"
                                                             onChange={handlePriceChange}
                                                             style={{ width: '110px' }}
@@ -663,7 +531,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
 
 
                                                 </td>
-                                                <td>
+                                                {/* <td>
                                                     {editIndex === index ? (
                                                         <button
                                                             type="button"
@@ -685,7 +553,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                                                             Edit
                                                         </button>
                                                     )}
-                                                </td>
+                                                </td> */}
 
                                             </tr>
                                         ))
@@ -724,7 +592,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                         <br />
 
                         <div className="productdirectory rounded" style={{ fontFamily: 'Nunito Sans, sans-serif' }}>
-                            <div
+                            {/* <div
                                 className="mb-2 mt-1"
                                 style={{
                                     fontSize: "0.85rem",
@@ -733,7 +601,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                                 }}
                             >
                                 <h5 style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Activity Report</h5>
-                            </div>
+                            </div> */}
                             <div style={{ overflowX: 'auto', maxWidth: '100%', scrollbarWidth: 'thin', }}>
                                 <table className="table table-striped" style={{
                                     width: "100%",
@@ -742,7 +610,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                                     border: "1px solid #ccc",
                                     fontFamily: 'Nunito Sans, sans-serif'
                                 }}>
-                                    <thead>
+                                    {/* <thead>
 
                                         <tr>
                                             <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Product Name</th>
@@ -751,7 +619,7 @@ const Fourthmain = ({ onPriceSharedValidation }) => {
                                             <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Currency</th>
                                             <th style={{ fontFamily: 'Nunito Sans, sans-serif', fontWeight: '700', padding: "10px", fontWeight: "bold", border: "1px solid #ccc" }}>Action</th>
                                         </tr>
-                                    </thead>
+                                    </thead> */}
                                     <tbody>
                                         {loading ? (
                                             <tr>
