@@ -503,110 +503,110 @@ const ThirdMain = ({ onProductSourcingValidation }) => {
                 >
                     <form className="d-grid gap-3">
                         <Tab.Container id="product-sourcing-tabs" defaultActiveKey="required">
-                          <Row>
-    <Col>
-        <Nav variant="underline" className="d-flex justify-content-between" style={{ borderBottom: "none" }}>
-            {/* Tab 1 */}
-            <Nav.Item className="tab1 text-center" style={{ position: "relative", flex: 1 }}>
-                <Nav.Link
-                    eventKey="not-required"
-                    className="text-wrap setFont"
-                    style={{
-                        fontFamily: 'Nunito Sans',
-                        fontSize: '0.9rem',
-                        color: activeTab === "not-required" ? "#375494" : "#111A2E",
-                        fontWeight: activeTab === "not-required" ? "700" : "500",
-                        paddingBottom: "10px",
-                        letterSpacing: '0.3px',
-                        transition: 'all 0.3s ease'
-                    }}
-                >
-                    Product Details
-                </Nav.Link>
-                {activeTab === "not-required" && (
-                    <img
-                        src={tabframe}
-                        alt="underline"
-                        style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "8px",
-                            objectFit: "cover"
-                        }}
-                    />
-                )}
-            </Nav.Item>
+                            <Row>
+                                <Col>
+                                    <Nav variant="underline" className="d-flex justify-content-between" style={{ borderBottom: "none" }}>
+                                        {/* Tab 1 */}
+                                        <Nav.Item className="tab1 text-center" style={{ position: "relative", flex: 1 }}>
+                                            <Nav.Link
+                                                eventKey="not-required"
+                                                className="text-wrap setFont"
+                                                style={{
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize: '0.9rem',
+                                                    color: activeTab === "not-required" ? "#375494" : "#111A2E",
+                                                    fontWeight: activeTab === "not-required" ? "700" : "500",
+                                                    paddingBottom: "10px",
+                                                    letterSpacing: '0.3px',
+                                                    transition: 'all 0.3s ease'
+                                                }}
+                                            >
+                                                Product Details
+                                            </Nav.Link>
+                                            {activeTab === "not-required" && (
+                                                <img
+                                                    src={tabframe}
+                                                    alt="underline"
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "8px",
+                                                        objectFit: "cover"
+                                                    }}
+                                                />
+                                            )}
+                                        </Nav.Item>
 
-            {/* Tab 2 */}
-            <Nav.Item className="text-center" style={{ position: "relative", flex: 1 }}>
-                <Nav.Link
-                    eventKey="required"
-                    className="text-wrap setFont"
-                    style={{
-                        fontFamily: 'Nunito Sans',
-                        fontSize: '0.9rem',
-                        color: activeTab === "required" ? "#375494" : "#111A2E",
-                        fontWeight: activeTab === "required" ? "700" : "500",
-                        paddingBottom: "10px",
-                        letterSpacing: '0.3px',
-                        transition: 'all 0.3s ease'
-                    }}
-                >
-                    Product Sourcing Required
-                </Nav.Link>
-                {activeTab === "required" && (
-                    <img
-                        src={tabframe}
-                        alt="underline"
-                        style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "8px",
-                            objectFit: "cover"
-                        }}
-                    />
-                )}
-            </Nav.Item>
+                                        {/* Tab 2 */}
+                                        <Nav.Item className="text-center" style={{ position: "relative", flex: 1 }}>
+                                            <Nav.Link
+                                                eventKey="required"
+                                                className="text-wrap setFont"
+                                                style={{
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize: '0.9rem',
+                                                    color: activeTab === "required" ? "#375494" : "#111A2E",
+                                                    fontWeight: activeTab === "required" ? "700" : "500",
+                                                    paddingBottom: "10px",
+                                                    letterSpacing: '0.3px',
+                                                    transition: 'all 0.3s ease'
+                                                }}
+                                            >
+                                                Product Sourcing Required
+                                            </Nav.Link>
+                                            {activeTab === "required" && (
+                                                <img
+                                                    src={tabframe}
+                                                    alt="underline"
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "8px",
+                                                        objectFit: "cover"
+                                                    }}
+                                                />
+                                            )}
+                                        </Nav.Item>
 
-            {/* Tab 3 */}
-            <Nav.Item className="text-center" style={{ position: "relative", flex: 1 }}>
-                <Nav.Link
-                    eventKey="not-required-2"
-                    className="text-wrap setFont"
-                    style={{
-                        fontFamily: 'Nunito Sans',
-                        fontSize: '0.9rem',
-                        color: activeTab === "not-required-2" ? "#375494" : "#111A2E",
-                        fontWeight: activeTab === "not-required-2" ? "700" : "500",
-                        paddingBottom: "10px",
-                        letterSpacing: '0.3px',
-                        transition: 'all 0.3s ease'
-                    }}
-                >
-                    Product Sourcing Not Required
-                </Nav.Link>
-                {activeTab === "not-required-2" && (
-                    <img
-                        src={tabframe}
-                        alt="underline"
-                        style={{
-                            position: "absolute",
-                            bottom: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "8px",
-                            objectFit: "cover"
-                        }}
-                    />
-                )}
-            </Nav.Item>
-        </Nav>
-    </Col>
-</Row>
+                                        {/* Tab 3 */}
+                                        <Nav.Item className="text-center" style={{ position: "relative", flex: 1 }}>
+                                            <Nav.Link
+                                                eventKey="not-required-2"
+                                                className="text-wrap setFont"
+                                                style={{
+                                                    fontFamily: 'Nunito Sans',
+                                                    fontSize: '0.9rem',
+                                                    color: activeTab === "not-required-2" ? "#375494" : "#111A2E",
+                                                    fontWeight: activeTab === "not-required-2" ? "700" : "500",
+                                                    paddingBottom: "10px",
+                                                    letterSpacing: '0.3px',
+                                                    transition: 'all 0.3s ease'
+                                                }}
+                                            >
+                                                Product Sourcing Not Required
+                                            </Nav.Link>
+                                            {activeTab === "not-required-2" && (
+                                                <img
+                                                    src={tabframe}
+                                                    alt="underline"
+                                                    style={{
+                                                        position: "absolute",
+                                                        bottom: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "8px",
+                                                        objectFit: "cover"
+                                                    }}
+                                                />
+                                            )}
+                                        </Nav.Item>
+                                    </Nav>
+                                </Col>
+                            </Row>
 
 
 

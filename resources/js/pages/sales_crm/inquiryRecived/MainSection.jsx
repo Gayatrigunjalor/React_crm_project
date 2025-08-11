@@ -1340,64 +1340,56 @@ const MainSection = () => {
     const handleProductSourcingValidation = (isValid) => {
         setHasProductSourcingData(isValid);
     };
-
+    const [piNumber, setPiNumber] = useState("");
+    const [piDate, setPiDate] = useState("");
     const isStageValid = () => {
-        switch (currentIndex) {
-            case 0: // Inquired Data
-                return areRequiredFieldsFilled();
-            case 1: // Lead Acknowledgment
-                return hasLeadAcknowledgment;
-            case 2: // Product Sourcing
-                return hasProductSourcingData;
-            case 3: // Price Shared
-                return isPiDetailsValid;
-            case 4: // Quotation Send
-                return formData.buying_plan && formData.name && formData.mo_no && formData.email;
-            case 5: return hasFollowUpDetails;  // Validation for Follow Up (SixthMain)
-            case 6: return hasVictoryStageDetails;  // Validation for Victory Stage (SeventhMain)
-            default: return true;
-        }
-    };
+    switch (currentIndex) {
+        case 0: // Inquired Data
+            return areRequiredFieldsFilled();
+        case 1: // Lead Acknowledgment
+            return hasLeadAcknowledgment;
+        case 2: // Product Sourcing
+            return hasProductSourcingData;
+        case 3: // Price Shared
+            return isPiDetailsValid; // Ensure this is checked
+        case 4: // Quotation Send
+            return true; // Skip validation for Quotation Send
+        case 5: // Follow Up
+            return true; // Skip validation for Follow Up
+        case 6: // Victory Stage
+            return true; // Skip validation for Victory Stage
+        default:
+            return true;
+    }
+};
 
-    const handleStageSelect = (index) => {
-        // Only check validation when moving forward
-        if (index > currentIndex) {
-            if (!isStageValid()) {
-                // Show appropriate error message based on stage
-                switch (currentIndex) {
-                    case 0:
-                        toast.error("Please complete all required fields");
-                        break;
-                    case 1:
-                        toast.error("Please complete lead acknowledgment first");
-                        break;
-                    case 2:
-                        toast.error("Please do Sourcing");
-                        break;
-                    case 3:
-                        toast.error("Please add at least one quoted price");
-                        break;
-                    case 4:
-                        toast.error("Please fill in PI Number and Date");
-                        break;
-                    case 5:
-                        toast.error("Please complete follow-up details");
-                        break;
-                    case 6:
-                        toast.error("Please complete Victory Stage details");
-                        break;
-                    case 7:
-                        toast.error("Please complete Final Stage details");
-                        break;
-                    default:
-                        break;
-                }
-                return;
+  const handleStageSelect = (index) => {
+    // Only check validation when moving forward, except for stages 5 and 6
+    if (index > currentIndex && (index !== 5 && index !== 6)) {
+        if (!isStageValid()) {
+            // Show appropriate error message based on stage
+            switch (currentIndex) {
+                case 0:
+                    toast.error("Please complete all required fields");
+                    break;
+                case 1:
+                    toast.error("Please complete lead acknowledgment first");
+                    break;
+                case 2:
+                    toast.error("Please do Sourcing");
+                    break;
+                case 3:
+                    toast.error("Please add at least one quoted price");
+                    break;
+                default:
+                    break;
             }
+            return;
         }
-        setCurrentIndex(index);
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
+    }
+    setCurrentIndex(index);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+};
 
     // Add effect to sync with localStorage
     useEffect(() => {
@@ -1526,7 +1518,7 @@ const MainSection = () => {
                             </div>
                         )}
 
-                          <div className="d-flex justify-content-between mt-2 mb-2">
+                        <div className="d-flex justify-content-between mt-2 mb-2">
                             <button
                                 className="setFont p-1 btn"
                                 onClick={() => handleStageSelect(currentIndex - 1)}
@@ -1558,7 +1550,6 @@ const MainSection = () => {
                                         fontFamily: "Nunito Sans",
                                         borderStyle: "none"
                                     }}
-                                    disabled={!isStageValid()} // <-- Disable if not valid
                                 >
                                     Next
                                 </button>
