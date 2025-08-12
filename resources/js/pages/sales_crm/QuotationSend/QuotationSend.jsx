@@ -405,23 +405,72 @@ const FifthMain = ({ onPiValidation }) => {
                             borderRadius: "20px",
                             padding: "1.5rem",
                             fontSize: "14px",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "0.8rem",
                         }}
                     >
-                        <div style={{ marginBottom: "0.5rem" }}>
-                            <strong>PI Number:</strong> {piNumber}
+                        {/* Row 1: Create Quotation */}
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <strong style={{ fontSize: "0.95rem" }}>Create Quotation:</strong>
+                            <button
+                                style={{
+                                    background: "linear-gradient(90deg, #0b1d4f, #2e4782)",
+                                    color: "#fff",
+                                    padding: "0.4rem 1rem",
+                                    border: "none",
+                                    borderRadius: "20px",
+                                    fontSize: "0.85rem",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Create Proforma Invoice
+                            </button>
                         </div>
-                        <div style={{ marginBottom: "0.5rem" }}>
-                            <strong>PI Date:</strong> {piDate}
-                        </div>
-                        <p style={{ color: "#6c757d", fontSize: "0.85rem" }}>
-                            <strong>Note:</strong> Once you shared the quotation with the customer, you can move forward.
+
+                        {/* Row 2: Note */}
+                        <p
+                            style={{
+                                margin: 0,
+                                color: "#6c7a94",
+                                fontSize: "0.85rem",
+                            }}
+                        >
+                            <strong>Note:</strong> Once you Shared quotation with customer, then you can
+                            move forward.
                         </p>
 
-                        {/* <div className="d-flex justify-content-end gap-2">
-      <button className="btn btn-light">Previous</button>
-      <button className="btn btn-primary">Next</button>
-    </div> */}
+                        {/* Row 3: Buttons */}
+                        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+                            <button
+                                style={{
+                                    backgroundColor: "#f0f0f0",
+                                    color: "#2e4782",
+                                    padding: "0.4rem 1rem",
+                                    border: "none",
+                                    borderRadius: "10px",
+                                    fontSize: "0.85rem",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Previous
+                            </button>
+                            <button
+                                style={{
+                                    backgroundColor: "#0b1d4f",
+                                    color: "#fff",
+                                    padding: "0.4rem 1rem",
+                                    border: "none",
+                                    borderRadius: "10px",
+                                    fontSize: "0.85rem",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Next
+                            </button>
+                        </div>
                     </div>
+
                 </div>
 
                 <div

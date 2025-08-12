@@ -12,6 +12,7 @@ import { useWindowSize } from 'react-use';
 import Dropzone from '../../../components/base/Dropzone';
 import { is } from "date-fns/locale";
 import { bt } from "@fullcalendar/core/internal-common";
+import Rightcard from "../inquiryRecived/Rightcard";
 
 
 const Seventhmain = () => {
@@ -597,286 +598,107 @@ const Seventhmain = () => {
 
     return (
         <>
-            {loading && <div className="loading-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px', fontFamily: 'Nunito Sans, sans-serif' }}>
-                <Spinner animation="border" variant="primary" />
-            </div>}
-            <div className="container mb-4" style={{ height: '400px' }}>
-                {/* <h6 style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Victory Stage</h6>
+            <div
+                className="card-main  d-flex justify-content-between"
+                style={{
+                    width: "1200px",
+                    maxWidth: '1200px',
 
-            <hr style={{ border: "1px solid #777" }} /> */}
-                <h6 style={{ fontFamily: 'Nunito Sans, sans-serif', fontSize: '18px', fontWeight: '700', textAlign: 'left' }}>
-                    Victory Stage
-                </h6>
+                    padding: "12px 16px",
+                    fontFamily: "Nunito Sans",
+                    display: "flex",
+                    flexDirection: "row",
+                    marginLeft: "-28px",
+                    flexWrap: "nowrap",
+                    gap: "16px",
+                    position: "relative",
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "row", // keep them horizontal
+                        justifyContent: "space-between",
+                        alignItems: "stretch", // same height
+                        gap: "20px", // space between cards
+                        width: "100%", // take full container width
+                    }}
+                >
+                    {/* Left Card */}
+                    <div
+                        className="left-card shadow-sm"
+                        style={{
+                            width: "50%", // half width
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                            borderRadius: "20px",
+                            padding: "1.5rem",
+                            overflow: "hidden",
+                            fontSize: "14px",
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <h6
+                            style={{
+                                fontFamily: "Nunito Sans, sans-serif",
+                                fontSize: "18px",
+                                fontWeight: "700",
+                                textAlign: "left",
+                            }}
+                        >
+                            Victory Stage
+                        </h6>
+                        <hr style={{ border: "1px solid #777", width: "100%" }} />
+                        <p>Your left card content here...</p>
+                    </div>
 
-                <hr style={{ border: "1px solid #777", width: '100%' }} />
-
-                <div className="d-flex justify-content-center align-items-center" style={{ width: "100%" }}>
-                    <div className="badgeContent d-flex gap-4">
-                        {!dealWon && (
-                            <Badge
-                                bg="success"
-                                style={{ fontFamily: 'Nunito Sans, sans-serif' }}
-                                className="px-3 py-2 cursor-pointer"
-                                onClick={handleDealWon}
-                            >
-                                Deal Won
-                            </Badge>
-                        )}
-
-
-
-
-                        {isCelebration && (
-                            <div
-                                style={{
-                                    position: 'fixed',
-                                    top: 0,
-                                    left: 0,
-                                    width: '100vw',
-                                    height: '100vh',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    flexDirection: 'column',
-                                    zIndex: 9999,
-                                    pointerEvents: 'none', // so it doesn't block clicks behind
-                                }}
-                            >
-                                <ReactConfetti
-                                    width={width}
-                                    height={height}
-                                    numberOfPieces={1000} // increased from 600
-                                    gravity={0.07}
-                                    wind={0.01}
-                                    initialVelocityY={10}
-                                    recycle={false}
-                                    colors={[
-                                        '#ff3838', '#fff200', '#00e676',
-                                        '#40c4ff', '#ff6d00', '#f50057', '#9c27b0',
-                                        '#00bcd4', '#8bc34a', '#ffc107', '#795548',
-                                        '#e91e63', '#3f51b5', '#4caf50', '#ff9800', '#607d8b' // 5 new colors
-                                    ]}
-                                // drawShape={(ctx) => {
-                                //     const emojis = ['🎉', '🎊', '💥', '✨', '🔥'];
-                                //     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
-                                //     ctx.font = '20px serif';
-                                //     ctx.fillText(emoji, 0, 10);
-                                // }}
-                                />
-
-                                <div style={{ pointerEvents: 'auto' }}>
-                                    {celebrationBanner}
-                                </div>
-                            </div>
-                        )}
-
-
-                        {((showCreateBTButton || dealWon) && !btCreated) && (
-                            <Badge
-                                style={{ backgroundColor: '#0097EB', fontFamily: 'Nunito Sans, sans-serif' }}
-                                className="px-3 py-2 cursor-pointer"
-                                onClick={() => setShowCreateBtPopup(true)}
-                            >
-                                Create BT
-                            </Badge>
-                        )}
+                    {/* Right Card */}
+                    <div
+                        className="right-card shadow-sm"
+                        style={{
+                            width: "50%", // half width
+                            backgroundColor: "#fff",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                            borderRadius: "20px",
+                            padding: "1.5rem",
+                            fontSize: "14px",
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <h6
+                            style={{
+                                fontFamily: "Nunito Sans, sans-serif",
+                                fontSize: "18px",
+                                fontWeight: "700",
+                                textAlign: "left",
+                            }}
+                        >
+                            Second Card
+                        </h6>
+                        <hr style={{ border: "1px solid #777", width: "100%" }} />
+                        <p>Your right card content here...</p>
                     </div>
                 </div>
 
 
 
-                {/* Modal for Create BT Form */}
-                <Modal
-                    show={showCreateBtPopup}
-                    onHide={() => setShowCreateBtPopup(false)}
-                    centered
-                    size="lg"
-                    className="me-3"
+                <div
+                    className="right-card shadow-sm"
+                    style={{
+                        flex: "0 0 485px",
+                        height: "500px", // fixed height to match left
+                        borderRadius: "20px",
+                        backgroundColor: "#fff",
+                        margin: "10px 0 10px 0px",
+                        padding: "30px",
+                        overflow: "hidden", // prevent scrollbars
+                    }}
                 >
-                    <Modal.Header closeButton>
-                        <Modal.Title style={{ fontFamily: 'Nunito Sans, sans-serif' }}>Create BT</Modal.Title>
-                    </Modal.Header>
+                    <Rightcard />
+                </div>
 
-
-                    <Modal.Body>
-                        <Form className="mt-4" style={{ fontFamily: 'Nunito Sans, sans-serif' }}>
-
-                            <div className="row g-3">
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Opportunity ID</Form.Label>
-                                        {/* <Form.Control type="text" value={savedQueryId} onChange={(e) => setOppId(e.target.value)} /> */}
-                                        <Form.Control type="text" value={uniqueQueryId} onChange={(e) => setOppId(e.target.value)} />
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Opportunity Date</Form.Label>
-                                        <Form.Control type="text" value={dateOnly} onChange={(e) => setOppDate(e.target.value)} readOnly />
-                                    </Form.Group>
-                                </div>
-                            </div>
-
-
-
-
-                            <h5 className="mt-4 mb-3">Inquiry Details</h5>
-                            <div className="row g-3">
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Customer Name</Form.Label>
-                                        <Form.Control type="text" value={customerName} readOnly />
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>PI No(s)</Form.Label>
-                                        <Form.Control type="text" placeholder="PI No" value={piNumber} onChange={(e) => setPiNumber(e.target.value)} readOnly />
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>PI Date</Form.Label>
-                                        <Form.Control type="text" placeholder="PI Date" value={piDate} onChange={(e) => setPiDate(e.target.value)} readOnly />
-                                    </Form.Group>
-                                </div>
-                            </div>
-
-                            <h5 className="mt-4 mb-3">Logistics Instructions</h5>
-                            <div className="row g-3">
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Shipping Liability</Form.Label>
-                                        {/* <Form.Control type="text" value={shippingLiability} onChange={(e) => setShippingLiability(e.target.value)} /> */}
-                                        <Form.Select name="shipping_liabelity">
-                                            <option value="">Select</option>
-                                            <option value="Inorbvict">Inorbvict</option>
-                                            <option value="Buyer">Buyer</option>
-                                        </Form.Select>
-                                        <Form.Control.Feedback type="invalid">Please enter shipping liability</Form.Control.Feedback>
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Cold Chain</Form.Label>
-                                        {/* <Form.Control type="text" value={coldChain} onChange={(e) => setColdChain(e.target.value)} /> */}
-                                        <Form.Select name="cold_chain" onChange={(e) => setColdChain(e.target.value)}>
-                                            <option value="">Select</option>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </Form.Select>
-                                        <Form.Control.Feedback type="invalid">Please enter cold chain</Form.Control.Feedback>
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Zip Code</Form.Label>
-                                        <Form.Control type="text" placeholder="Zip Code" value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Freight Target Cost</Form.Label>
-                                        <Form.Control type="number" placeholder="Freight Target Cost" value={freightCost} onChange={(e) => setFreightCost(e.target.value)} />
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Shipment Mode</Form.Label>
-                                        <ReactSelect value={selectedOptions}
-                                            options={shipmentOptions}
-                                            isMulti
-                                            placeholder="Select Shipment Mode"
-                                            name="shipment_mode"
-                                            onChange={handleModeChange}
-                                        />
-                                        {/* <Form.Control type="text" value={shipmentMode} onChange={(e) => setShipmentMode(e.target.value)} /> */}
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Inco Term</Form.Label>
-
-                                        <Select
-                                            value={incoTerms.find((term) => term.id === selectedIncoTermId) ? { value: selectedIncoTermId, label: incoTerms.find((term) => term.id === selectedIncoTermId).inco_term } : null}
-                                            options={incoTerms.map((term) => ({
-                                                value: term.id,
-                                                label: term.inco_term,
-                                            }))}
-                                            placeholder="Select an Inco Term"
-                                            name="Inco Term"
-                                            onChange={handleIncoTermChange}
-                                        />
-                                        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-                                        {/* {selectedIncoTermId && <p>Selected Inco Term ID: {selectedIncoTermId}</p>} */}
-                                        {/* <Form.Control
-                                            as="select"
-                                            value={selectedIncoTermId} // Bind to selected ID
-                                            onChange={handleIncoTermChange}
-                                        >
-                                            <option value="">Select an Inco Term</option>
-                                            {incoTerms.map((term) => (
-                                                <option key={term.id} value={term.id}> 
-                                                    {term.inco_term} 
-                                                </option>
-                                            ))}
-                                        </Form.Control> */}
-                                    </Form.Group>
-
-                                </div>
-
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Final Destination</Form.Label>
-                                        <Form.Control type="text" placeholder="Final Destination" value={finalDestination} onChange={(e) => setFinalDestination(e.target.value)} />
-                                    </Form.Group>
-                                </div>
-                                <div className="col-md-6 col-lg-4">
-                                    <Form.Group>
-                                        <Form.Label>Port of Unloading</Form.Label>
-                                        <Form.Control type="text" placeholder="Port of Unloading" value={portOfUnloading} onChange={(e) => setPortOfUnloading(e.target.value)} />
-                                    </Form.Group>
-                                </div>
-                            </div>
-
-
-                            <h5 className="mt-4 mb-3">Attachment <span style={{ color: 'red' }}>*</span></h5>
-
-
-                            <Dropzone onDrop={acceptedFiles => handleDrop(acceptedFiles)} onRemove={index => handleRemoveFile(index)} />
-                            {errors.files && <div className="text-danger mt-1">{errors.files}</div>}
-
-
-                            <div className="d-flex justify-content-end mt-4">
-                                <Button
-                                    variant="success"
-                                    style={{ backgroundColor: '#004DFF', fontFamily: 'Nunito Sans, sans-serif' }}
-                                    onClick={() => {
-                                        if (!loading) {
-                                            setLoading(true);
-                                            handleAddButtonClick();
-                                        }
-                                    }}
-                                    disabled={loading}
-                                >
-                                    {loading ? (
-                                        <Spinner
-                                            as="span"
-                                            animation="border"
-                                            size="sm"
-                                            role="status"
-                                            aria-hidden="true"
-                                            className="me-2"
-                                        />
-                                    ) : null}
-                                    {loading ? "Processing..." : "Add"}
-                                </Button>
-                            </div>
-                        </Form>
-                    </Modal.Body>
-
-
-                </Modal>
             </div>
         </>
 

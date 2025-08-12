@@ -17,7 +17,7 @@ const Remark = ({ onClose }) => {
         background: "#fff",
         borderRadius: "16px",
         padding: "20px",
-        fontFamily: "Nunito Sans, sans-serif",
+        fontFamily: "Nunito Sans",
         width: "100%",
         maxWidth: "550px", // make sure this exists
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",

@@ -756,6 +756,35 @@ const InquiredData = (props) => {
     }
     `;
 
+    const responsiveStyles = `
+    .card-main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 12px 16px;
+        margin: 0 auto;
+        max-width: 1200px; /* Limit max width for larger screens */
+    }
+ .left-card, .right-card {
+        flex: 1 1 300px; /* Allow cards to grow and shrink */
+        margin: 10px;
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        overflow: hidden;
+    }
+            @media (max-width: 768px) {
+        .left-card, .right-card {
+            flex: 1 1 100%; /* Stack cards on smaller screens */
+        }
+    }
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .left-card, .right-card {
+            flex: 1 1 45%; /* Two cards side by side on medium screens */
+        }
+    }
+`;
     //my code
 
     const [tableWidth, setTableWidth] = useState("100%");
@@ -843,12 +872,15 @@ const InquiredData = (props) => {
     return (
         <>
             <style>{placeholderStyle}</style>
+            <style>{responsiveStyles}</style>
+
             {/* Responsive container without fixed dimensions */}
             <div
                 className="card-main  d-flex justify-content-between"
                 style={{
                     width: "1200px",
-                    maxWidth: "100%",
+                  maxWidth: '1200px',
+
                     padding: "12px 16px",
                     fontFamily: "Nunito Sans",
                     display: "flex",
@@ -861,7 +893,7 @@ const InquiredData = (props) => {
             >
                 {/* Left Card */}
                 <div
-                    className="card shadow-sm"
+                    className="left-card shadow-sm"
                     style={{
                         flex: "0 0 700px",
                         backgroundColor: "#fff",
@@ -1060,7 +1092,7 @@ const InquiredData = (props) => {
 
                 {/* Right Card */}
                 <div
-                    className="card shadow-sm"
+                    className="right-card shadow-sm"
                     style={{
                         flex: "0 0 485px",
                         height: "500px", // fixed height to match left
@@ -1343,53 +1375,53 @@ const MainSection = () => {
     const [piNumber, setPiNumber] = useState("");
     const [piDate, setPiDate] = useState("");
     const isStageValid = () => {
-    switch (currentIndex) {
-        case 0: // Inquired Data
-            return areRequiredFieldsFilled();
-        case 1: // Lead Acknowledgment
-            return hasLeadAcknowledgment;
-        case 2: // Product Sourcing
-            return hasProductSourcingData;
-        case 3: // Price Shared
-            return isPiDetailsValid; // Ensure this is checked
-        case 4: // Quotation Send
-            return true; // Skip validation for Quotation Send
-        case 5: // Follow Up
-            return true; // Skip validation for Follow Up
-        case 6: // Victory Stage
-            return true; // Skip validation for Victory Stage
-        default:
-            return true;
-    }
-};
-
-  const handleStageSelect = (index) => {
-    // Only check validation when moving forward, except for stages 5 and 6
-    if (index > currentIndex && (index !== 5 && index !== 6)) {
-        if (!isStageValid()) {
-            // Show appropriate error message based on stage
-            switch (currentIndex) {
-                case 0:
-                    toast.error("Please complete all required fields");
-                    break;
-                case 1:
-                    toast.error("Please complete lead acknowledgment first");
-                    break;
-                case 2:
-                    toast.error("Please do Sourcing");
-                    break;
-                case 3:
-                    toast.error("Please add at least one quoted price");
-                    break;
-                default:
-                    break;
-            }
-            return;
+        switch (currentIndex) {
+            case 0: // Inquired Data
+                return areRequiredFieldsFilled();
+            case 1: // Lead Acknowledgment
+                return hasLeadAcknowledgment;
+            case 2: // Product Sourcing
+                return hasProductSourcingData;
+            case 3: // Price Shared
+                return isPiDetailsValid; // Ensure this is checked
+            case 4: // Quotation Send
+                return true; // Skip validation for Quotation Send
+            case 5: // Follow Up
+                return true; // Skip validation for Follow Up
+            case 6: // Victory Stage
+                return true; // Skip validation for Victory Stage
+            default:
+                return true;
         }
-    }
-    setCurrentIndex(index);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-};
+    };
+
+    const handleStageSelect = (index) => {
+        // Only check validation when moving forward, except for stages 5 and 6
+        if (index > currentIndex && (index !== 5 && index !== 6)) {
+            if (!isStageValid()) {
+                // Show appropriate error message based on stage
+                switch (currentIndex) {
+                    case 0:
+                        toast.error("Please complete all required fields");
+                        break;
+                    case 1:
+                        toast.error("Please complete lead acknowledgment first");
+                        break;
+                    case 2:
+                        toast.error("Please do Sourcing");
+                        break;
+                    case 3:
+                        toast.error("Please add at least one quoted price");
+                        break;
+                    default:
+                        break;
+                }
+                return;
+            }
+        }
+        setCurrentIndex(index);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     // Add effect to sync with localStorage
     useEffect(() => {
@@ -1451,6 +1483,7 @@ const MainSection = () => {
         body {
             overflow-x: hidden;
         }
+            
     `;
 
     const handleFollowUpDetailsChange = (hasDetails) => {
@@ -1460,7 +1493,6 @@ const MainSection = () => {
     const handleVictoryStageDetailsChange = (hasDetails) => {
         setHasVictoryStageDetails(hasDetails);
     };
-
 
     return (
         <OpportunityProvider>
